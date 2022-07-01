@@ -20,7 +20,6 @@ setup_kwargs = dict(
     license='Apache_2.0',
     keywords=["security", "tools", "SBOM", "DevSecOps", "SPDX", "CycloneDX"],
     install_requires=requirements,
-    data_files=[('license_data', ['spdx_licenses.json'])],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',

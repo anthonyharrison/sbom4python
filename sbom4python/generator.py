@@ -34,8 +34,9 @@ class SBOMGenerator:
                     parent_id = project_id
                     relationship = " DESCRIBES "
                 else:
-                    parent_id = package_set[parent]
-                    relationship = " CONTAINS "
+                    if parent in package_set:
+                        parent_id = package_set[parent]
+                        relationship = " CONTAINS "
                 self.bom.generatePackageDetails(
                     product,
                     str(id) + "-" + product,
@@ -50,9 +51,11 @@ class SBOMGenerator:
                 if parent == "-":
                     parent_id = project_id
                     relationship = " DESCRIBES "
-                else:
+                elif parent in package_set:
                     relationship = " CONTAINS "
                     parent_id = package_set[parent]
+                else:
+                    parent_id = None
                 if parent_id is not None:
                     self.bom.generateRelationship(
                         self.bom.package_ident(parent_id),

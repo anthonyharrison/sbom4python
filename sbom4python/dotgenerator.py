@@ -32,6 +32,8 @@ class DOTGenerator:
         self.show('\tsize="8,10.5"; ratio=fill;')
         # Generate graph
         root = ""
+        explicit_style = " [shape=box, style=filled, fontcolor=white, fillcolor=blue];"
+        implicit_style = " [shape=box, style=filled, fontcolor=white, fillcolor=green];"
         packages = []
         for element in data:
             source = element[0]
@@ -42,28 +44,29 @@ class DOTGenerator:
             application = '"' + self.get_package(dest) + '"'
 
             if relationship == " DESCRIBES ":
-                # self.show("\t" + lib + " [shape=tab, style=filled, fillcolor=red];")
                 # Should only be one DESCRIBES relationship.
                 root = application
             else:
                 if lib == root:
                     if lib not in packages:
                         packages.append(lib)
-                        self.show("\t" + lib + " [shape=box, style=filled, fillcolor=red];")
+                        self.show(
+                            "\t" + lib + " [shape=box, style=filled, fillcolor=red];"
+                        )
                     if application not in packages:
-                        packages.append(application)                        
-                        self.show("\t" + application + " [shape=box, style=filled, fontcolor=white, fillcolor=blue];")
+                        packages.append(application)
+                        self.show("\t" + application + explicit_style)
                 elif application == root:
                     if lib not in packages:
                         packages.append(lib)
-                        self.show("\t" + lib + " [shape=box, style=filled, fontcolor=white, fillcolor=blue];")
+                        self.show("\t" + lib + explicit_style)
                 else:
                     if lib not in packages:
                         packages.append(lib)
-                        self.show("\t" + lib + " [shape=box, style=filled, fontcolor=white, fillcolor=green];")       
+                        self.show("\t" + lib + implicit_style)
                     if application not in packages:
                         packages.append(application)
-                        self.show("\t" + application + " [shape=box, style=filled, fontcolor=white, fillcolor=green];")  
+                        self.show("\t" + application + implicit_style)
                 self.show("\t" + lib + " -> " + application + ";")
         self.show("}")
         # end

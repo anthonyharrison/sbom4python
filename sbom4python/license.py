@@ -3,12 +3,15 @@
 
 
 import json
+import os
 
 
 class LicenseScanner:
     def __init__(self):
         # Load licenses
-        licfile = open("license_data/spdx_licenses.json")
+        license_dir, filename = os.path.split(__file__)
+        license_path = os.path.join(license_dir, "license_data", "spdx_licenses.json")
+        licfile = open(license_path)
         self.licenses = json.load(licfile)
 
     def find_license(self, license):

@@ -19,12 +19,9 @@ class SBOMScanner:
     def run_program(self, command_line):
         # Remove any null bytes
         command_line = command_line.replace("\x00", "")
-        # print (command_line)
         # Split command line into individual elements
         params = command_line.split()
-        # print(params)
         res = subprocess.run(params, capture_output=True, text=True)
-        # print(res)
         return res.stdout.splitlines()
 
     def process_module(self):
@@ -63,10 +60,6 @@ class SBOMScanner:
             for r in dependencies.split(","):
                 self.set_module(r)
                 self.process_module()
-                # print("Parent", parent)
-                # print("Name", s.get("Name"))
-                # print("Version", s.get("Version"))
-                # print("License", s.get("License"))
                 self.add(
                     [
                         parent.lower().replace("_", "-"),
