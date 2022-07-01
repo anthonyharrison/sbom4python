@@ -73,7 +73,6 @@ class SBOMGenerator:
         return self.bom.getBOM()
 
     def generate_cyclonedx(self, project_name, packages):
-        # project_id = self.bom.generateDocumentHeader(project_name)
         # Process list of packages
         id = 1
         package_set = {}
@@ -86,12 +85,8 @@ class SBOMGenerator:
             if product not in package_set:
                 package_set[product] = str(id) + "-" + product
                 if parent == "-":
-                    # parent_id = project_id
-                    # relationship = " DESCRIBES "
                     type = "application"
                 else:
-                    # parent_id = package_set[parent]
-                    # relationship = " CONTAINS "
                     type = "library"
                 self.bom.generateComponent(type, product, supplier, version)
                 id = id + 1

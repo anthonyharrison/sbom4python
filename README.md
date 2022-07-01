@@ -14,7 +14,7 @@ and also to support subsequent audit needs to determine if a particular componen
 
 To install use the following command:
 
-`pip install SBOM4Python`
+`pip install sbom4python`
 
 Alternatively, just clone the repo and install dependencies using the following command:
 
