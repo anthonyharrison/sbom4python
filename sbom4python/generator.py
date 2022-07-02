@@ -76,6 +76,7 @@ class SBOMGenerator:
         return self.bom.getBOM()
 
     def generate_cyclonedx(self, project_name, packages):
+        self.bom.generateDocumentHeader(project_name)
         # Process list of packages
         id = 1
         package_set = {}

@@ -25,7 +25,7 @@ class CycloneDXGenerator:
         self.doc = []
         self.package_id = 0
         self.include_license = include_license
-        self.doc = None
+        self.doc = {}
         self.component = []
         self.sbom_complete = False
 
