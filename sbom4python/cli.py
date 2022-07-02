@@ -99,7 +99,7 @@ def main(argv=None):
     args = {key: value for key, value in vars(raw_args).items() if value}
     args = ChainMap(args, defaults)
 
-    # TODO Validate CLI parameters
+    # Validate CLI parameters
 
     module_name = args["module"]
 
@@ -157,3 +157,6 @@ def main(argv=None):
         sbom_out.generate_output(sbom_gen.get_cyclonedx())
 
     return 0
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -6,7 +6,6 @@ from datetime import datetime
 
 from sbom4python.license import LicenseScanner
 
-
 class SPDXGenerator:
     """
     Generate SPDX Tag/Value SBOM.
@@ -18,7 +17,7 @@ class SPDXGenerator:
     SPDX_LICENSE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
     NAME = "SBOM4PYTHON_Generator"
-    VERSION = "0.1"
+    VERSION = "0.1.0"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
@@ -157,7 +156,7 @@ class SPDXGenerator:
         component["versionInfo"] = version
         # Attempt to detect an organization
         if len(supplier.split()) > 2:
-            component["supplier"] = "Organization" + supplier
+            component["supplier"] = "Organization: " + supplier
         else:
             component["supplier"] = "Person: " + supplier
         component["downloadLocation"] = "NONE"

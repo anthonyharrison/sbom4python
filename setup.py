@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 with open("README.md", encoding="utf-8") as f:
     readme = f.read()
@@ -33,6 +33,18 @@ setup_kwargs = dict(
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
+    python_requires=">=3.7",
+    packages=find_packages(),
+    package_data={
+        "sbom4python": [
+            "license_data/*.json",
+        ],
+    },
+    entry_points={
+        "console_scripts": [
+            "sbom4python = sbom4python.cli:main",
+        ],
+    },
 )
 
 setup(**setup_kwargs)
