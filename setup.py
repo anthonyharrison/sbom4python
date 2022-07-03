@@ -1,5 +1,7 @@
 from setuptools import find_packages, setup
 
+from sbom4python.version import VERSION
+
 with open("README.md", encoding="utf-8") as f:
     readme = f.read()
 
@@ -8,7 +10,7 @@ with open("requirements.txt", encoding="utf-8") as f:
 
 setup_kwargs = dict(
     name='sbom4python',
-    version='0.1.0',
+    version=VERSION,
     description='SBOM generator for Python modules',
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -21,7 +23,7 @@ setup_kwargs = dict(
     keywords=["security", "tools", "SBOM", "DevSecOps", "SPDX", "CycloneDX"],
     install_requires=requirements,
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         "Natural Language :: English",

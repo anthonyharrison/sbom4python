@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 
 from sbom4python.license import LicenseScanner
+from sbom4python.version import VERSION
 
 class SPDXGenerator:
     """
@@ -17,7 +18,6 @@ class SPDXGenerator:
     SPDX_LICENSE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
     NAME = "SBOM4PYTHON_Generator"
-    VERSION = "0.1.0"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
@@ -73,7 +73,7 @@ class SPDXGenerator:
             + str(uuid.uuid4()),
         )
         self.generateTag("LicenseListVersion", self.SPDX_LICENSE_VERSION)
-        self.generateTag("Creator: Tool", self.NAME + "-" + self.VERSION)
+        self.generateTag("Creator: Tool", self.NAME + "-" + VERSION)
         self.generateTag("Created", self.generateTime())
         self.generateTag(
             "CreatorComment",

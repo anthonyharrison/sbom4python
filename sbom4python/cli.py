@@ -10,8 +10,8 @@ from sbom4python.dotgenerator import DOTGenerator
 from sbom4python.generator import SBOMGenerator
 from sbom4python.output import SBOMOutput
 from sbom4python.scanner import SBOMScanner
+from sbom4python.version import VERSION
 
-VERSION = "0.1.0"
 
 # CLI processing
 
