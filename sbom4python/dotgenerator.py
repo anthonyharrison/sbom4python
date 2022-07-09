@@ -25,6 +25,10 @@ class DOTGenerator:
             return package_id[package_id[startpos:].find("-") + startpos + 1 :]
         return package_id
 
+    def set_colour(self, colour):
+        base = " [shape=box, style=filled, fontcolor=white, fillcolor="
+        return base + colour + "];"
+
     def generatedot(self, data):
 
         # Generate header
@@ -32,8 +36,8 @@ class DOTGenerator:
         self.show('\tsize="8,10.5"; ratio=fill;')
         # Generate graph
         root = ""
-        explicit_style = " [shape=box, style=filled, fontcolor=white, fillcolor=blue];"
-        implicit_style = " [shape=box, style=filled, fontcolor=white, fillcolor=green];"
+        explicit_style = self.set_colour("royalblue")
+        implicit_style = self.set_colour("darkgreen")
         packages = []
         for element in data:
             source = element[0]
@@ -50,9 +54,7 @@ class DOTGenerator:
                 if lib == root:
                     if lib not in packages:
                         packages.append(lib)
-                        self.show(
-                            "\t" + lib + " [shape=box, style=filled, fillcolor=red];"
-                        )
+                        self.show("\t" + lib + self.set_colour("darkred"))
                     if application not in packages:
                         packages.append(application)
                         self.show("\t" + application + explicit_style)
