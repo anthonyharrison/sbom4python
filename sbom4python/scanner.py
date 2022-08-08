@@ -65,13 +65,15 @@ class SBOMScanner:
             for r in dependencies.split(","):
                 self.set_module(r)
                 self.process_module()
-                self.add(
-                    [
-                        parent.lower().replace("_", "-"),
-                        self.get("Name").lower().replace("_", "-"),
-                        self.get("Version"),
-                        self.get("Author"),
-                        self.get("License"),
-                    ]
-                )
-                self.analyze(r.strip(), self.get("Requires"))
+                # Only process module for dependencies if valid
+                if self.module_valid():
+                    self.add(
+                        [
+                            parent.lower().replace("_", "-"),
+                            self.get("Name").lower().replace("_", "-"),
+                            self.get("Version"),
+                            self.get("Author"),
+                            self.get("License"),
+                        ]
+                    )
+                    self.analyze(r.strip(), self.get("Requires"))
