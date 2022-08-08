@@ -3,6 +3,7 @@
 
 import uuid
 
+from sbom4python.license import LicenseScanner
 
 class CycloneDXGenerator:
     """
@@ -17,7 +18,7 @@ class CycloneDXGenerator:
     SPDX_LICENCE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
     NAME = "SBOM4PYTHON_Generator"
-    VERSION = "0.1"
+    # VERSION = "0.1"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
@@ -25,6 +26,7 @@ class CycloneDXGenerator:
         self.doc = []
         self.package_id = 0
         self.include_license = include_license
+        self.license = LicenseScanner()
         self.format = cyclonedx_format
         if self.format == "xml":
             self.doc = []
@@ -110,11 +112,12 @@ class CycloneDXGenerator:
         component["name"] = name
         component["version"] = version
         component["cpe"] = f"cpe:/a:{supplier}:{name}:{version}"
-        license = dict()
-        license["id"] = identified_licence
-        item = dict()
-        item["license"] = license
-        component["licenses"] = [ item ]
+        if identified_licence != "":
+            license = dict()
+            license["id"] = self.license.find_license(identified_licence)
+            item = dict()
+            item["license"] = license
+            component["licenses"] = [ item ]
         self.component.append(component)
 
     def generateXMLComponent(self, id, type, name, supplier, version, identified_licence):
@@ -122,9 +125,10 @@ class CycloneDXGenerator:
         self.store(f"<name>{name}<\\name>")
         self.store(f"<version>{version}<\\version>")
         self.store(f"<cpe>cpe:/a:{supplier}:{name}:{version}<\\cpe>")
-        self.store("<licenses>")
-        self.store("<license>")
-        self.store(f"<id>{identified_licence}<\\id>")
-        self.store("<\\license>")
-        self.store("<\\licenses>")
+        if identified_licence != "":
+            self.store("<licenses>")
+            self.store("<license>")
+            self.store(f"<id>{self.license.find_license(identified_licence)}<\\id>")
+            self.store("<\\license>")
+            self.store("<\\licenses>")
         self.store("<\\component>")
