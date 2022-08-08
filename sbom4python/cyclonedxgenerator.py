@@ -97,24 +97,34 @@ class CycloneDXGenerator:
             dependency["dependsOn"] = [package_id]
             self.relationship.append(dependency)
 
-    def generateComponent(self, id, type, name, supplier, version):
+    def generateComponent(self, id, type, name, supplier, version, licence):
         if self.format == "xml":
-            self.generateXMLComponent(id, type, name, supplier, version)
+            self.generateXMLComponent(id, type, name, supplier, version, licence)
         else:
-            self.generateJSONComponent(id, type, name, supplier, version)
+            self.generateJSONComponent(id, type, name, supplier, version, licence)
 
-    def generateJSONComponent(self, id, type, name, supplier, version):
+    def generateJSONComponent(self, id, type, name, supplier, version, identified_licence):
         component = dict()
         component["type"] = type
         component["bom-ref"] = id
         component["name"] = name
         component["version"] = version
         component["cpe"] = f"cpe:/a:{supplier}:{name}:{version}"
+        license = dict()
+        license["id"] = identified_licence
+        item = dict()
+        item["license"] = license
+        component["licenses"] = [ item ]
         self.component.append(component)
 
-    def generateXMLComponent(self, id, type, name, supplier, version):
+    def generateXMLComponent(self, id, type, name, supplier, version, identified_licence):
         self.store(f'<component type="{type}" bom-ref="{id}">')
         self.store(f"<name>{name}<\\name>")
         self.store(f"<version>{version}<\\version>")
         self.store(f"<cpe>cpe:/a:{supplier}:{name}:{version}<\\cpe>")
+        self.store("<licenses>")
+        self.store("<license>")
+        self.store(f"<id>{identified_licence}<\\id>")
+        self.store("<\\license>")
+        self.store("<\\licenses>")
         self.store("<\\component>")

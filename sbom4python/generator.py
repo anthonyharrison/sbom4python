@@ -84,7 +84,7 @@ class SBOMGenerator:
             product = package[1]
             version = package[2]
             supplier = package[3]
-            # licence = package[4]
+            licence = package[4]
             parent = package[0].lower()
             if product not in package_set:
                 package_set[product] = str(id) + "-" + product
@@ -93,7 +93,7 @@ class SBOMGenerator:
                 else:
                     type = "library"
                 self.bom.generateComponent(
-                    package_set[product], type, product, supplier, version
+                    package_set[product], type, product, supplier, version, licence
                 )
                 if parent != "-":
                     self.bom.generateRelationship(
