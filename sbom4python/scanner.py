@@ -9,12 +9,15 @@ class SBOMScanner:
     Simple SBOM File Scanner.
     """
 
-    def __init__(self):
+    def __init__(self, debug):
         self.record = []
+        self.debug = debug
 
     def set_module(self, module):
         self.module = module
         self.module_valid = False
+        if self.debug:
+            print(f"Module: {self.module}")
 
     def run_program(self, command_line):
         # Remove any null bytes
@@ -33,6 +36,8 @@ class SBOMScanner:
             for line in out:
                 entry = line.split(":")
                 self.metadata[entry[0]] = entry[1].lstrip()
+        elif self.debug:
+            print(f"Module {self.module} not found")
 
     def add(self, entry):
         if entry not in self.record:

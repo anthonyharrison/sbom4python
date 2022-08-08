@@ -109,22 +109,20 @@ def main(argv=None):
         bom_format = "json"
 
     if args["debug"]:
-        print("Exclude Licences", args["exclude_license"])
-        print("SBOM type", args["sbom"])
+        print("Exclude Licences:", args["exclude_license"])
+        print("SBOM type:", args["sbom"])
         if args["sbom"] == "spdx":
-            print("Format", bom_format)
-        print("Output file", args["output_file"])
-        print("Graph file", args["graph"])
+            print("Format:", bom_format)
+        print("Output file:", args["output_file"])
+        print("Graph file:", args["graph"])
         print(f"Analysing {module_name}")
 
-    sbom_scan = SBOMScanner()
+    sbom_scan = SBOMScanner(args["debug"])
     sbom_scan.set_module(module_name)
     sbom_scan.process_module()
 
     # If module not found, abort processing
     if not sbom_scan.valid_module():
-        if args["debug"]:
-            print(f"Module {module_name} not found")
         return -1
 
     sbom_scan.add(
@@ -157,6 +155,7 @@ def main(argv=None):
         sbom_out.generate_output(sbom_gen.get_cyclonedx())
 
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
