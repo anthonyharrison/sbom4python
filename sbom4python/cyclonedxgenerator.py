@@ -27,6 +27,7 @@ class CycloneDXGenerator:
         self.include_license = include_license
         self.doc = {}
         self.component = []
+        self.relationship = []
         self.sbom_complete = False
 
     def show(self, message):
@@ -36,6 +37,7 @@ class CycloneDXGenerator:
         if not self.sbom_complete:
             # Add set of detected components to SBOM
             self.doc["components"] = self.component
+            self.doc["dependencies"] = self.relationship
             self.sbom_complete = True
         return self.doc
 
@@ -49,9 +51,26 @@ class CycloneDXGenerator:
             "version": 1,
         }
 
-    def generateComponent(self, type, name, supplier, version):
+    def generateRelationship(self, parent_id, package_id):
+        # Check if entry exists. If so, update list of dependencies
+        element_found = False
+        for element in self.relationship:
+            if element["ref"] == parent_id:
+                # Update list of dependencies
+                element["dependsOn"].append(package_id)
+                element_found = True
+                break
+        if not element_found:
+            # New item found
+            dependency = dict()
+            dependency["ref"] = parent_id
+            dependency["dependsOn"] = [package_id]
+            self.relationship.append(dependency)
+
+    def generateComponent(self, id, type, name, supplier, version):
         component = dict()
         component["type"] = type
+        component["bom-ref"] = id
         component["name"] = name
         component["version"] = version
         component["cpe"] = f"cpe:/a:{supplier}:{name}:{version}"

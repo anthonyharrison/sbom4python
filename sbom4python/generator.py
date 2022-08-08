@@ -92,5 +92,11 @@ class SBOMGenerator:
                     type = "application"
                 else:
                     type = "library"
-                self.bom.generateComponent(type, product, supplier, version)
+                self.bom.generateComponent(
+                    package_set[product], type, product, supplier, version
+                )
+                if parent != "-":
+                    self.bom.generateRelationship(
+                        package_set[parent], package_set[product]
+                    )
                 id = id + 1
