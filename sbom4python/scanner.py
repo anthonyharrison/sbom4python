@@ -66,7 +66,7 @@ class SBOMScanner:
                 self.set_module(r)
                 self.process_module()
                 # Only process module for dependencies if valid
-                if self.module_valid():
+                if self.valid_module():
                     self.add(
                         [
                             parent.lower().replace("_", "-"),
