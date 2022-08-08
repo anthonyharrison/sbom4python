@@ -21,28 +21,50 @@ class CycloneDXGenerator:
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
-    def __init__(self, include_license: False):
+    def __init__(self, include_license: False, cyclonedx_format="json"):
         self.doc = []
         self.package_id = 0
         self.include_license = include_license
-        self.doc = {}
-        self.component = []
+        self.format = cyclonedx_format
+        if self.format == "xml":
+            self.doc = []
+        else:
+            self.doc = {}
+            self.component = []
         self.relationship = []
         self.sbom_complete = False
 
-    def show(self, message):
+    def store(self, message):
         self.doc.append(message)
 
     def getBOM(self):
         if not self.sbom_complete:
-            # Add set of detected components to SBOM
-            self.doc["components"] = self.component
-            self.doc["dependencies"] = self.relationship
+            if self.format == "xml":
+                self.store("<\\components>")
+                # Now process dependencies
+                self.store("<dependencies>")
+                for element in self.relationship:
+                    item=element["ref"]
+                    self.store(f'<dependency ref="{item}">')
+                    for depends in element["dependsOn"]:
+                        self.store(f'<dependency ref="{depends}"/>')
+                    self.store("<\\dependency>")
+                self.store("<\\dependencies>")
+                self.store("<\\bom>")
+            else:
+                # Add set of detected components to SBOM
+                self.doc["components"] = self.component
+                self.doc["dependencies"] = self.relationship
             self.sbom_complete = True
         return self.doc
 
     def generateDocumentHeader(self, project_name):
-        # urn = "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79"
+        if self.format == "xml":
+            self.generateXMLDocumentHeader(project_name)
+        else:
+            self.generateJSONDocumentHeader(project_name)
+
+    def generateJSONDocumentHeader(self, project_name):
         urn = "urn:uuid" + str(uuid.uuid4())
         self.doc = {
             "bomFormat": "CycloneDX",
@@ -50,6 +72,14 @@ class CycloneDXGenerator:
             "serialNumber": urn,
             "version": 1,
         }
+
+    def generateXMLDocumentHeader(self, project_name):
+        urn = "urn:uuid" + str(uuid.uuid4())
+        self.store("<?xml version='1.0' encoding='UTF-8'?>")
+        self.store("<bom xmlns='http://cyclonedx.org/schema/bom/1.4'")
+        self.store(f'serialNumber="{urn}"')
+        self.store('version="1">')
+        self.store("<components>")
 
     def generateRelationship(self, parent_id, package_id):
         # Check if entry exists. If so, update list of dependencies
@@ -68,6 +98,12 @@ class CycloneDXGenerator:
             self.relationship.append(dependency)
 
     def generateComponent(self, id, type, name, supplier, version):
+        if self.format == "xml":
+            self.generateXMLComponent(id, type, name, supplier, version)
+        else:
+            self.generateJSONComponent(id, type, name, supplier, version)
+
+    def generateJSONComponent(self, id, type, name, supplier, version):
         component = dict()
         component["type"] = type
         component["bom-ref"] = id
@@ -75,3 +111,10 @@ class CycloneDXGenerator:
         component["version"] = version
         component["cpe"] = f"cpe:/a:{supplier}:{name}:{version}"
         self.component.append(component)
+
+    def generateXMLComponent(self, id, type, name, supplier, version):
+        self.store(f'<component type="{type}" bom-ref="{id}">')
+        self.store(f"<name>{name}<\\name>")
+        self.store(f"<version>{version}<\\version>")
+        self.store(f"<cpe>cpe:/a:{supplier}:{name}:{version}<\\cpe>")
+        self.store("<\\component>")

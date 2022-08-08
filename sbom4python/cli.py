@@ -63,8 +63,8 @@ def main(argv=None):
         "--format",
         action="store",
         default="tag",
-        choices=["tag", "json"],
-        help="specify format of SPDX software bill of materials (sbom) (default: tag)",
+        choices=["tag", "json", "xml"],
+        help="specify format of software bill of materials (sbom) (default: tag)",
     )
 
     output_group.add_argument(
@@ -103,16 +103,21 @@ def main(argv=None):
 
     module_name = args["module"]
 
+    # Ensure format is aligned with type of SBOM
+    bom_format = args["format"]
     if args["sbom"] == "spdx":
-        bom_format = args["format"]
+        # XML not valid for SPDX
+        if bom_format == "xml":
+            bom_format = "tag"
     else:
-        bom_format = "json"
+        # Tag not valid for CycloneDX
+        if bom_format == "tag":
+            bom_format = "json"
 
     if args["debug"]:
         print("Exclude Licences:", args["exclude_license"])
         print("SBOM type:", args["sbom"])
-        if args["sbom"] == "spdx":
-            print("Format:", bom_format)
+        print("Format:", bom_format)
         print("Output file:", args["output_file"])
         print("Graph file:", args["graph"])
         print(f"Analysing {module_name}")

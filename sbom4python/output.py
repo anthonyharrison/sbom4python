@@ -45,6 +45,7 @@ class SBOMOutput:
         self.format_process = {
             "tag": self.format_tag_data,
             "json": self.format_json_data,
+            "xml": self.format_tag_data,
             "dot": self.format_tag_data,
         }
         self.type = "console"

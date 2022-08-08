@@ -14,7 +14,7 @@ class SBOMGenerator:
         if sbom_type == "spdx":
             self.bom = SPDXGenerator(include_license, format)
         else:
-            self.bom = CycloneDXGenerator(include_license)
+            self.bom = CycloneDXGenerator(include_license, format)
 
     def generate_spdx(self, project_name, packages):
         self.sbom_complete = False
