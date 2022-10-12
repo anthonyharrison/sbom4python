@@ -5,7 +5,6 @@ import uuid
 from datetime import datetime
 
 from sbom4python.license import LicenseScanner
-from sbom4python.version import VERSION
 
 class SPDXGenerator:
     """
@@ -17,17 +16,18 @@ class SPDXGenerator:
     SPDX_NAMESPACE = "http://spdx.org/spdxdocs/"
     SPDX_LICENSE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
-    NAME = "SBOM4PYTHON_Generator"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
-    def __init__(self, include_license: False, spdx_format="tag"):
+    def __init__(self, include_license: False, spdx_format="tag", application="sbom4python", version="0.1"):
 
         self.package_id = 0
         self.include_license = include_license
         self.license = LicenseScanner()
         self.relationship = []
         self.format = spdx_format
+        self.application = application
+        self.application_version = version
         if self.format == "tag":
             self.doc = []
         else:
@@ -73,7 +73,7 @@ class SPDXGenerator:
             + str(uuid.uuid4()),
         )
         self.generateTag("LicenseListVersion", self.SPDX_LICENSE_VERSION)
-        self.generateTag("Creator: Tool", self.NAME + "-" + VERSION)
+        self.generateTag("Creator: Tool", self.application + "-" + self.application_version)
         self.generateTag("Created", self.generateTime())
         self.generateTag(
             "CreatorComment",
@@ -87,7 +87,7 @@ class SPDXGenerator:
         self.doc["spdxVersion"] = self.SPDX_VERSION
         creation_info = dict()
         creation_info["comment"] = "This document has been automatically generated."
-        creation_info["creators"] = ["Tool: " + self.NAME]
+        creation_info["creators"] = ["Tool: " + self.application + "-" + self.application_version]
         creation_info["created"] = self.generateTime()
         creation_info["licenseListVersion"] = self.SPDX_LICENSE_VERSION
         self.doc["creationInfo"] = creation_info

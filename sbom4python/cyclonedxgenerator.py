@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import uuid
+from datetime import datetime
 
 from sbom4python.license import LicenseScanner
 
@@ -22,12 +23,14 @@ class CycloneDXGenerator:
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
-    def __init__(self, include_license: False, cyclonedx_format="json"):
+    def __init__(self, include_license: False, cyclonedx_format="json", application="sbom4python", version="0.1"):
         self.doc = []
         self.package_id = 0
         self.include_license = include_license
         self.license = LicenseScanner()
         self.format = cyclonedx_format
+        self.application = application
+        self.application_version = version
         if self.format == "xml":
             self.doc = []
         else:
@@ -60,6 +63,10 @@ class CycloneDXGenerator:
             self.sbom_complete = True
         return self.doc
 
+    def generateTime(self):
+        # Generate data/time label in format YYYY-MM-DDThh:mm:ssZ
+        return datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+
     def generateDocumentHeader(self, project_name):
         if self.format == "xml":
             self.generateXMLDocumentHeader(project_name)
@@ -74,6 +81,15 @@ class CycloneDXGenerator:
             "specVersion": self.CYCLONEDX_VERSION,
             "serialNumber": urn,
             "version": 1,
+            "metadata": {
+                "timestamp": self.generateTime(),
+                "tools": [
+                    {
+                        "name": self.application,
+                        "version": self.application_version,
+                    }
+                ],
+            }
         }
 
     def generateXMLDocumentHeader(self, project_name):
@@ -82,6 +98,12 @@ class CycloneDXGenerator:
         self.store("<bom xmlns='http://cyclonedx.org/schema/bom/1.4'")
         self.store(f'serialNumber="{urn}"')
         self.store('version="1">')
+        self.store('<metadata>')
+        self.store(f'<timestamp>{self.generateTime()}<\\timestamp>')
+        self.store('<tools>')
+        self.store(f'<name>{self.application}<\\name>')
+        self.store(f'<version>{self.application_version}<\\version>')
+        self.store('<\\tools>')
         self.store("<components>")
 
     def generateRelationship(self, parent_id, package_id):

@@ -19,11 +19,12 @@ from sbom4python.version import VERSION
 def main(argv=None):
 
     argv = argv or sys.argv
+    app_name = "sbom4python"
     parser = argparse.ArgumentParser(
-        prog="sbom4python",
+        prog=app_name,
         description=textwrap.dedent(
             """
-            The SBOM4Python generates a Software Bill of Materials for the
+            SBOM4Python generates a Software Bill of Materials for the
             specified installed Python module identifying all of the dependent
             components which are explicity defined (typically via requirements.txt
             file) or implicitly as a hidden dependency.
@@ -142,7 +143,7 @@ def main(argv=None):
     sbom_scan.analyze(sbom_scan.get("Name"), sbom_scan.get("Requires"))
 
     # Generate SBOM file
-    sbom_gen = SBOMGenerator(args["exclude_license"], args["sbom"], args["format"])
+    sbom_gen = SBOMGenerator(args["exclude_license"], args["sbom"], args["format"], app_name, VERSION)
     sbom_out = SBOMOutput(args["output_file"], bom_format)
 
     if args["sbom"] == "spdx":
