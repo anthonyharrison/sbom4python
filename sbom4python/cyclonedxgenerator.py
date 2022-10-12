@@ -69,6 +69,7 @@ class CycloneDXGenerator:
     def generateJSONDocumentHeader(self, project_name):
         urn = "urn:uuid" + str(uuid.uuid4())
         self.doc = {
+            "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
             "bomFormat": "CycloneDX",
             "specVersion": self.CYCLONEDX_VERSION,
             "serialNumber": urn,
