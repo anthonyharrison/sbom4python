@@ -143,7 +143,7 @@ def main(argv=None):
     sbom_scan.analyze(sbom_scan.get("Name"), sbom_scan.get("Requires"))
 
     # Generate SBOM file
-    sbom_gen = SBOMGenerator(args["exclude_license"], args["sbom"], args["format"], app_name, VERSION)
+    sbom_gen = SBOMGenerator(args["exclude_license"], args["sbom"], bom_format, app_name, VERSION)
     sbom_out = SBOMOutput(args["output_file"], bom_format)
 
     if args["sbom"] == "spdx":
