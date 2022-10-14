@@ -98,7 +98,7 @@ class CycloneDXGenerator:
         self.store('<metadata>')
         self.store(f'<timestamp>{self.generateTime()}</timestamp>')
         self.store('<tools>')
-        self.store(f'<name>{self.application}<\\name>')
+        self.store(f'<name>{self.application}</name>')
         self.store(f'<version>{self.application_version}</version>')
         self.store('</tools>')
         self.store('</metadata>')
