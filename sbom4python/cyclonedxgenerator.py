@@ -11,15 +11,12 @@ class CycloneDXGenerator:
     Generate CycloneDX JSON SBOM.
     """
 
-    import uuid
-
     CYCLONEDX_VERSION = "1.4"
     DATA_LICENCE = "CC0-1.0"
     SPDX_NAMESPACE = "http://spdx.org/spdxdocs/"
     SPDX_LICENCE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
     NAME = "SBOM4PYTHON_Generator"
-    # VERSION = "0.1"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
@@ -138,6 +135,9 @@ class CycloneDXGenerator:
         if identified_licence != "":
             license = dict()
             license["id"] = self.license.find_license(identified_licence)
+            license_url = self.license.get_license_url(license["id"])
+            if license_url is not None:
+                license["url"] = license_url
             item = dict()
             item["license"] = license
             component["licenses"] = [ item ]
@@ -151,7 +151,11 @@ class CycloneDXGenerator:
         if identified_licence != "":
             self.store("<licenses>")
             self.store("<license>")
-            self.store(f"<id>{self.license.find_license(identified_licence)}<\\id>")
+            license_id = self.license.find_license(identified_licence)
+            self.store(f"<id>{license_id}<\\id>")
+            license_url = self.license.get_license_url(license_id)
+            if license_url is not None:
+                self.store(f"<id>{license_url}<\\id>")
             self.store("<\\license>")
             self.store("<\\licenses>")
         self.store("<\\component>")

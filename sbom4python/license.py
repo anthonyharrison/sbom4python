@@ -9,6 +9,7 @@ import os
 class LicenseScanner:
 
     APACHE_SYNOYMNS = ["Apache Software License", "Apache License, Version 2.0", "Apache 2.0", "Apache 2"]
+    DEFAULT_LICENSE = "UNKNOWN"
 
     def __init__(self):
         # Load licenses
@@ -23,7 +24,6 @@ class LicenseScanner:
     def find_license(self, license):
         # Search list of licenses to find match
 
-        default_license = "UNKNOWN"
         for lic in self.licenses["licenses"]:
             # Comparisons ignore case of provided license text
             if lic["licenseId"].lower() == license.lower():
@@ -31,4 +31,13 @@ class LicenseScanner:
             elif lic["name"].lower() == license.lower():
                 return lic["licenseId"]
         license_id = self.check_synoymn(license, self.APACHE_SYNOYMNS, "Apache-2.0")
-        return license_id if license_id is not None else default_license
+        return license_id if license_id is not None else self.DEFAULT_LICENSE
+
+    def get_license_url(self, license_id):
+        # Assume that license_id is a valid SPDX id
+        if license_id != self.DEFAULT_LICENSE:
+            for lic in self.licenses["licenses"]:
+                # License URL is in the seeAlso field. If multiple entries, jsut return first one
+                if lic["licenseId"] == license_id:
+                    return lic["seeAlso"][0]
+        return None # License not found
