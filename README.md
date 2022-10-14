@@ -78,6 +78,9 @@ file is compatible with the [DOT language](https://graphviz.org/doc/info/lang.ht
 
 Licenced under the Apache 2.0 Licence.
 
+The tool uses a local copy of the [SPDX Licenses List](https://github.com/spdx/license-list-data) which is released under
+[Creative Commons Attribution 3.0 (CC-BY-3.0)](http://creativecommons.org/licenses/by/3.0/).
+
 ## Limitations
 
 This tool is meant to support software development and security audit functions. However the usefulness of the tool is dependent on the SBOM data
