@@ -10,11 +10,13 @@ class SBOMGenerator:
     Simple SBOM Generator.
     """
 
-    def __init__(self, include_license: False, sbom_type="spdx", format="tag", application="sbom4python", version="0.1"):
+    def __init__(self, include_license: False, sbom_type="spdx", format="tag", application="sbom4python", version="0.1", package_manager = "pypi"):
         if sbom_type == "spdx":
             self.bom = SPDXGenerator(include_license, format, application, version)
+            self.bom.set_purl(package_manager)
         else:
             self.bom = CycloneDXGenerator(include_license, format, application, version)
+            self.bom.set_purl(package_manager)
 
     def generate_spdx(self, project_name, packages):
         self.sbom_complete = False

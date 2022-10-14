@@ -34,6 +34,11 @@ class SPDXGenerator:
             self.doc = {}
             self.component = []
             self.relationships = []
+        self.include_purl = False
+
+    def set_purl(self, package_manager):
+        self.include_purl = True
+        self.package_manager = package_manager
 
     def show(self, message):
         self.doc.append(message)
@@ -142,6 +147,8 @@ class SPDXGenerator:
         self.generateTag("PackageLicenseConcluded", self.license_ident(license))
         self.generateTag("PackageLicenseDeclared", self.license_ident(license))
         self.generateTag("PackageCopyrightText", "NOASSERTION")
+        if self.include_purl:
+            self.generateTag("ExternalRef", f"PACKAGE-MANAGER pkg:{self.package_manager}/{package}@{version}")
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship
         )
@@ -164,6 +171,12 @@ class SPDXGenerator:
         component["licenseConcluded"] = self.license_ident(license)
         component["licenseDeclared"] = self.license_ident(license)
         component["copyrightText"] = "NOASSERTION"
+        if self.include_purl:
+            purl_data = dict()
+            purl_data["referenceCategory"] = "PACKAGE-MANAGER"
+            purl_data["referenceLocator"] = f"pkg:{self.package_manager}/{package}@{version}"
+            purl_data["referenceType"] = "purl"
+            component["externalRefs"] = [purl_data]
         self.component.append(component)
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship

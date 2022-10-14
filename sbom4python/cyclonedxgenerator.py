@@ -8,7 +8,7 @@ from sbom4python.license import LicenseScanner
 
 class CycloneDXGenerator:
     """
-    Generate CycloneDX JSON SBOM.
+    Generate CycloneDX SBOM.
     """
 
     CYCLONEDX_VERSION = "1.4"
@@ -35,6 +35,11 @@ class CycloneDXGenerator:
             self.component = []
         self.relationship = []
         self.sbom_complete = False
+        self.include_purl = False
+
+    def set_purl(self, package_manager):
+        self.include_purl = True
+        self.package_manager = package_manager
 
     def store(self, message):
         self.doc.append(message)
@@ -145,6 +150,8 @@ class CycloneDXGenerator:
                 item = dict()
                 item["license"] = license
                 component["licenses"] = [ item ]
+        if self.include_purl:
+            component["purl"] = f"pkg:{self.package_manager}/{name}@{version}"
         self.component.append(component)
 
     def generateXMLComponent(self, id, type, name, supplier, version, identified_licence):
@@ -164,4 +171,6 @@ class CycloneDXGenerator:
                     self.store(f'<url>"{license_url}"</url>')
                 self.store("</license>")
                 self.store("</licenses>")
+        if self.include_purl:
+            self.store(f"<purl>pkg:{self.package_manager}/{name}@{version}</purl>")
         self.store("</component>")
