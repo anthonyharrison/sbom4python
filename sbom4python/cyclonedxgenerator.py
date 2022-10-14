@@ -42,7 +42,7 @@ class CycloneDXGenerator:
     def getBOM(self):
         if not self.sbom_complete:
             if self.format == "xml":
-                self.store("<\\components>")
+                self.store("</components>")
                 # Now process dependencies
                 self.store("<dependencies>")
                 for element in self.relationship:
@@ -50,9 +50,9 @@ class CycloneDXGenerator:
                     self.store(f'<dependency ref="{item}">')
                     for depends in element["dependsOn"]:
                         self.store(f'<dependency ref="{depends}"/>')
-                    self.store("<\\dependency>")
-                self.store("<\\dependencies>")
-                self.store("<\\bom>")
+                    self.store("</dependency>")
+                self.store("</dependencies>")
+                self.store("</bom>")
             else:
                 # Add set of detected components to SBOM
                 self.doc["components"] = self.component
@@ -96,11 +96,12 @@ class CycloneDXGenerator:
         self.store(f'serialNumber="{urn}"')
         self.store('version="1">')
         self.store('<metadata>')
-        self.store(f'<timestamp>{self.generateTime()}<\\timestamp>')
+        self.store(f'<timestamp>{self.generateTime()}</timestamp>')
         self.store('<tools>')
         self.store(f'<name>{self.application}<\\name>')
-        self.store(f'<version>{self.application_version}<\\version>')
-        self.store('<\\tools>')
+        self.store(f'<version>{self.application_version}</version>')
+        self.store('</tools>')
+        self.store('</metadata>')
         self.store("<components>")
 
     def generateRelationship(self, parent_id, package_id):
@@ -133,29 +134,34 @@ class CycloneDXGenerator:
         component["version"] = version
         component["cpe"] = f"cpe:/a:{supplier}:{name}:{version}"
         if identified_licence != "":
-            license = dict()
-            license["id"] = self.license.find_license(identified_licence)
-            license_url = self.license.get_license_url(license["id"])
-            if license_url is not None:
-                license["url"] = license_url
-            item = dict()
-            item["license"] = license
-            component["licenses"] = [ item ]
+            license_id = self.license.find_license(identified_licence)
+            # Only include if valid license
+            if license_id != "UNKNOWN":
+                license = dict()
+                license["id"] = license_id
+                license_url = self.license.get_license_url(license["id"])
+                if license_url is not None:
+                    license["url"] = license_url
+                item = dict()
+                item["license"] = license
+                component["licenses"] = [ item ]
         self.component.append(component)
 
     def generateXMLComponent(self, id, type, name, supplier, version, identified_licence):
         self.store(f'<component type="{type}" bom-ref="{id}">')
-        self.store(f"<name>{name}<\\name>")
-        self.store(f"<version>{version}<\\version>")
-        self.store(f"<cpe>cpe:/a:{supplier}:{name}:{version}<\\cpe>")
+        self.store(f"<name>{name}</name>")
+        self.store(f"<version>{version}</version>")
+        self.store(f"<cpe>cpe:/a:{supplier}:{name}:{version}</cpe>")
         if identified_licence != "":
-            self.store("<licenses>")
-            self.store("<license>")
             license_id = self.license.find_license(identified_licence)
-            self.store(f"<id>{license_id}<\\id>")
-            license_url = self.license.get_license_url(license_id)
-            if license_url is not None:
-                self.store(f"<id>{license_url}<\\id>")
-            self.store("<\\license>")
-            self.store("<\\licenses>")
-        self.store("<\\component>")
+            # Only include if valid license
+            if license_id != "UNKNOWN":
+                self.store("<licenses>")
+                self.store("<license>")
+                self.store(f'<id>"{license_id}"</id>')
+                license_url = self.license.get_license_url(license_id)
+                if license_url is not None:
+                    self.store(f'<url>"{license_url}"</url>')
+                self.store("</license>")
+                self.store("</licenses>")
+        self.store("</component>")

@@ -37,7 +37,7 @@ class LicenseScanner:
         # Assume that license_id is a valid SPDX id
         if license_id != self.DEFAULT_LICENSE:
             for lic in self.licenses["licenses"]:
-                # License URL is in the seeAlso field. If multiple entries, jsut return first one
+                # License URL is in the seeAlso field. If multiple entries, just return first one
                 if lic["licenseId"] == license_id:
                     return lic["seeAlso"][0]
         return None # License not found
