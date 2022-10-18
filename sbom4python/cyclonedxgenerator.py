@@ -64,6 +64,9 @@ class CycloneDXGenerator:
             self.sbom_complete = True
         return self.doc
 
+    def getRelationships(self):
+        return self.relationship
+
     def generateTime(self):
         # Generate data/time label in format YYYY-MM-DDThh:mm:ssZ
         return datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")

@@ -149,19 +149,17 @@ def main(argv=None):
     if args["sbom"] == "spdx":
         sbom_gen.generate_spdx(module_name, sbom_scan.get_record())
         sbom_out.generate_output(sbom_gen.get_spdx())
-
-        if len(args["graph"]) > 0:
-            sbom_dot = DOTGenerator()
-            sbom_dot.generatedot(sbom_gen.get_relationships())
-            dot_out = SBOMOutput(args["graph"], "dot")
-            dot_out.generate_output(sbom_dot.getDOT())
-
     else:
         sbom_gen.generate_cyclonedx(module_name, sbom_scan.get_record())
         sbom_out.generate_output(sbom_gen.get_cyclonedx())
 
-    return 0
+    if len(args["graph"]) > 0:
+        sbom_dot = DOTGenerator()
+        sbom_dot.generatedot(sbom_gen.get_relationships())
+        dot_out = SBOMOutput(args["graph"], "dot")
+        dot_out.generate_output(sbom_dot.getDOT())
 
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())
