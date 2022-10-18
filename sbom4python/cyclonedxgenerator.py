@@ -14,7 +14,6 @@ class CycloneDXGenerator:
     CYCLONEDX_VERSION = "1.4"
     DATA_LICENCE = "CC0-1.0"
     SPDX_NAMESPACE = "http://spdx.org/spdxdocs/"
-    SPDX_LICENCE_VERSION = "3.9"
     SPDX_PROJECT_ID = "SPDXRef-DOCUMENT"
     NAME = "SBOM4PYTHON_Generator"
     PACKAGE_PREAMBLE = "SPDXRef-Package-"

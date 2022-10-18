@@ -10,6 +10,7 @@ class LicenseScanner:
 
     APACHE_SYNOYMNS = ["Apache Software License", "Apache License, Version 2.0", "Apache 2.0", "Apache 2"]
     DEFAULT_LICENSE = "UNKNOWN"
+    SPDX_LICENSE_VERSION = "3.18"
 
     def __init__(self):
         # Load licenses
@@ -17,6 +18,9 @@ class LicenseScanner:
         license_path = os.path.join(license_dir, "license_data", "spdx_licenses.json")
         licfile = open(license_path)
         self.licenses = json.load(licfile)
+
+    def get_license_version(self):
+        return self.SPDX_LICENSE_VERSION
 
     def check_synoymn(self, license, synoymns, value):
         return value if license in synoymns else None

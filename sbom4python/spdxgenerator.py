@@ -77,7 +77,7 @@ class SPDXGenerator:
             + "-"
             + str(uuid.uuid4()),
         )
-        self.generateTag("LicenseListVersion", self.SPDX_LICENSE_VERSION)
+        self.generateTag("LicenseListVersion", self.license.get_license_version())
         self.generateTag("Creator: Tool", self.application + "-" + self.application_version)
         self.generateTag("Created", self.generateTime())
         self.generateTag(
@@ -94,7 +94,7 @@ class SPDXGenerator:
         creation_info["comment"] = "This document has been automatically generated."
         creation_info["creators"] = ["Tool: " + self.application + "-" + self.application_version]
         creation_info["created"] = self.generateTime()
-        creation_info["licenseListVersion"] = self.SPDX_LICENSE_VERSION
+        creation_info["licenseListVersion"] = self.license.get_license_version()
         self.doc["creationInfo"] = creation_info
         # Project name mustn't have spaces in. Covert spaces to '-'
         self.doc["name"] = project_name.replace(" ", "-")
