@@ -137,9 +137,11 @@ class SPDXGenerator:
         self.generateTag("SPDXID", package_id)
         # Attempt to detect an organization
         if len(supplier.split()) > 2:
-            self.generateTag("PackageSupplier: Organization", supplier)
+            # Supplier name mustn't have spaces in. Covert spaces to '_'
+            self.generateTag("PackageSupplier: Organization", supplier.replace(" ", "_"))
         else:
-            self.generateTag("PackageSupplier: Person", supplier)
+            # Supplier name mustn't have spaces in. Covert spaces to '_'
+            self.generateTag("PackageSupplier: Person", supplier.replace(" ", "_"))
         self.generateTag("PackageVersion", version)
         self.generateTag("PackageDownloadLocation", "NOASSERTION")
         self.generateTag("FilesAnalyzed", "false")
@@ -163,9 +165,11 @@ class SPDXGenerator:
         component["versionInfo"] = version
         # Attempt to detect an organization
         if len(supplier.split()) > 2:
-            component["supplier"] = "Organization: " + supplier
+            # Supplier name mustn't have spaces in. Covert spaces to '_'
+            component["supplier"] = "Organization: " + supplier.replace(" ", "_")
         else:
-            component["supplier"] = "Person: " + supplier
+            # Supplier name mustn't have spaces in. Covert spaces to '_'
+            component["supplier"] = "Person: " + supplier.replace(" ", "_")
         component["downloadLocation"] = "NONE"
         component["filesAnalyzed"] = False
         component["licenseConcluded"] = self.license_ident(license)
