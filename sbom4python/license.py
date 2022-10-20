@@ -8,7 +8,12 @@ import os
 
 class LicenseScanner:
 
-    APACHE_SYNOYMNS = ["Apache Software License", "Apache License, Version 2.0", "Apache 2.0", "Apache 2"]
+    APACHE_SYNOYMNS = [
+        "Apache Software License",
+        "Apache License, Version 2.0",
+        "Apache 2.0",
+        "Apache 2",
+    ]
     DEFAULT_LICENSE = "UNKNOWN"
     SPDX_LICENSE_VERSION = "3.18"
 
@@ -41,7 +46,8 @@ class LicenseScanner:
         # Assume that license_id is a valid SPDX id
         if license_id != self.DEFAULT_LICENSE:
             for lic in self.licenses["licenses"]:
-                # License URL is in the seeAlso field. If multiple entries, just return first one
+                # License URL is in the seeAlso field.
+                # If multiple entries, just return first one
                 if lic["licenseId"] == license_id:
                     return lic["seeAlso"][0]
-        return None # License not found
+        return None  # License not found

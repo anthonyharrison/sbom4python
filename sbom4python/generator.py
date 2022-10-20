@@ -10,7 +10,15 @@ class SBOMGenerator:
     Simple SBOM Generator.
     """
 
-    def __init__(self, include_license: False, sbom_type="spdx", format="tag", application="sbom4python", version="0.1", package_manager = "pypi"):
+    def __init__(
+        self,
+        include_license: False,
+        sbom_type="spdx",
+        format="tag",
+        application="sbom4python",
+        version="0.1",
+        package_manager="pypi",
+    ):
         if sbom_type == "spdx":
             self.bom = SPDXGenerator(include_license, format, application, version)
             self.bom.set_purl(package_manager)
@@ -105,5 +113,5 @@ class SBOMGenerator:
             else:
                 if parent != "-":
                     self.bom.generateRelationship(
-                            package_set[parent], package_set[product]
-                        )
+                        package_set[parent], package_set[product]
+                    )

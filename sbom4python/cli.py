@@ -12,7 +12,6 @@ from sbom4python.output import SBOMOutput
 from sbom4python.scanner import SBOMScanner
 from sbom4python.version import VERSION
 
-
 # CLI processing
 
 
@@ -143,7 +142,9 @@ def main(argv=None):
     sbom_scan.analyze(sbom_scan.get("Name"), sbom_scan.get("Requires"))
 
     # Generate SBOM file
-    sbom_gen = SBOMGenerator(args["exclude_license"], args["sbom"], bom_format, app_name, VERSION, "pypi")
+    sbom_gen = SBOMGenerator(
+        args["exclude_license"], args["sbom"], bom_format, app_name, VERSION, "pypi"
+    )
     sbom_out = SBOMOutput(args["output_file"], bom_format)
 
     if args["sbom"] == "spdx":
@@ -160,6 +161,7 @@ def main(argv=None):
         dot_out.generate_output(sbom_dot.getDOT())
 
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

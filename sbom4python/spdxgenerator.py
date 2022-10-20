@@ -6,6 +6,7 @@ from datetime import datetime
 
 from sbom4python.license import LicenseScanner
 
+
 class SPDXGenerator:
     """
     Generate SPDX Tag/Value SBOM.
@@ -19,7 +20,13 @@ class SPDXGenerator:
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
-    def __init__(self, include_license: False, spdx_format="tag", application="sbom4python", version="0.1"):
+    def __init__(
+        self,
+        include_license: False,
+        spdx_format="tag",
+        application="sbom4python",
+        version="0.1",
+    ):
 
         self.package_id = 0
         self.include_license = include_license
@@ -78,7 +85,9 @@ class SPDXGenerator:
             + str(uuid.uuid4()),
         )
         self.generateTag("LicenseListVersion", self.license.get_license_version())
-        self.generateTag("Creator: Tool", self.application + "-" + self.application_version)
+        self.generateTag(
+            "Creator: Tool", self.application + "-" + self.application_version
+        )
         self.generateTag("Created", self.generateTime())
         self.generateTag(
             "CreatorComment",
@@ -92,7 +101,9 @@ class SPDXGenerator:
         self.doc["spdxVersion"] = self.SPDX_VERSION
         creation_info = dict()
         creation_info["comment"] = "This document has been automatically generated."
-        creation_info["creators"] = ["Tool: " + self.application + "-" + self.application_version]
+        creation_info["creators"] = [
+            "Tool: " + self.application + "-" + self.application_version
+        ]
         creation_info["created"] = self.generateTime()
         creation_info["licenseListVersion"] = self.license.get_license_version()
         self.doc["creationInfo"] = creation_info
@@ -138,7 +149,9 @@ class SPDXGenerator:
         # Attempt to detect an organization
         if len(supplier.split()) > 2:
             # Supplier name mustn't have spaces in. Covert spaces to '_'
-            self.generateTag("PackageSupplier: Organization", supplier.replace(" ", "_"))
+            self.generateTag(
+                "PackageSupplier: Organization", supplier.replace(" ", "_")
+            )
         else:
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             self.generateTag("PackageSupplier: Person", supplier.replace(" ", "_"))
@@ -150,7 +163,10 @@ class SPDXGenerator:
         self.generateTag("PackageLicenseDeclared", self.license_ident(license))
         self.generateTag("PackageCopyrightText", "NOASSERTION")
         if self.include_purl:
-            self.generateTag("ExternalRef", f"PACKAGE-MANAGER pkg:{self.package_manager}/{package}@{version}")
+            self.generateTag(
+                "ExternalRef",
+                f"PACKAGE-MANAGER pkg:{self.package_manager}/{package}@{version}",
+            )
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship
         )
@@ -178,7 +194,9 @@ class SPDXGenerator:
         if self.include_purl:
             purl_data = dict()
             purl_data["referenceCategory"] = "PACKAGE-MANAGER"
-            purl_data["referenceLocator"] = f"pkg:{self.package_manager}/{package}@{version}"
+            purl_data[
+                "referenceLocator"
+            ] = f"pkg:{self.package_manager}/{package}@{version}"
             purl_data["referenceType"] = "purl"
             component["externalRefs"] = [purl_data]
         self.component.append(component)

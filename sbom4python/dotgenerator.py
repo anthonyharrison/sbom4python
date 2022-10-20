@@ -24,7 +24,7 @@ class DOTGenerator:
             return package_id[package_id[startpos:].find("-") + startpos + 1 :]
         elif "-" in package_id:
             # Format is n-<package>
-            return package_id[package_id.find("-") + 1:]
+            return package_id[package_id.find("-") + 1 :]
         return package_id
 
     def set_colour(self, colour):

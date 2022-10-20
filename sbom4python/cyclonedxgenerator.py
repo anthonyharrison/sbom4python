@@ -6,6 +6,7 @@ from datetime import datetime
 
 from sbom4python.license import LicenseScanner
 
+
 class CycloneDXGenerator:
     """
     Generate CycloneDX SBOM.
@@ -19,7 +20,13 @@ class CycloneDXGenerator:
     PACKAGE_PREAMBLE = "SPDXRef-Package-"
     LICENSE_PREAMBLE = "LicenseRef-"
 
-    def __init__(self, include_license: False, cyclonedx_format="json", application="sbom4python", version="0.1"):
+    def __init__(
+        self,
+        include_license: False,
+        cyclonedx_format="json",
+        application="sbom4python",
+        version="0.1",
+    ):
         self.doc = []
         self.package_id = 0
         self.include_license = include_license
@@ -50,7 +57,7 @@ class CycloneDXGenerator:
                 # Now process dependencies
                 self.store("<dependencies>")
                 for element in self.relationship:
-                    item=element["ref"]
+                    item = element["ref"]
                     self.store(f'<dependency ref="{item}">')
                     for depends in element["dependsOn"]:
                         self.store(f'<dependency ref="{depends}"/>')
@@ -102,7 +109,7 @@ class CycloneDXGenerator:
                         "version": self.application_version,
                     }
                 ],
-            }
+            },
         }
 
     def generateXMLDocumentHeader(self, project_name):
@@ -111,13 +118,13 @@ class CycloneDXGenerator:
         self.store("<bom xmlns='http://cyclonedx.org/schema/bom/1.4'")
         self.store(f'serialNumber="{urn}"')
         self.store('version="1">')
-        self.store('<metadata>')
-        self.store(f'<timestamp>{self.generateTime()}</timestamp>')
-        self.store('<tools>')
-        self.store(f'<name>{self.application}</name>')
-        self.store(f'<version>{self.application_version}</version>')
-        self.store('</tools>')
-        self.store('</metadata>')
+        self.store("<metadata>")
+        self.store(f"<timestamp>{self.generateTime()}</timestamp>")
+        self.store("<tools>")
+        self.store(f"<name>{self.application}</name>")
+        self.store(f"<version>{self.application_version}</version>")
+        self.store("</tools>")
+        self.store("</metadata>")
         self.store("<components>")
 
     def generateRelationship(self, parent_id, package_id):
@@ -142,7 +149,9 @@ class CycloneDXGenerator:
         else:
             self.generateJSONComponent(id, type, name, supplier, version, licence)
 
-    def generateJSONComponent(self, id, type, name, supplier, version, identified_licence):
+    def generateJSONComponent(
+        self, id, type, name, supplier, version, identified_licence
+    ):
         component = dict()
         component["type"] = type
         component["bom-ref"] = id
@@ -161,12 +170,14 @@ class CycloneDXGenerator:
                     license["url"] = license_url
                 item = dict()
                 item["license"] = license
-                component["licenses"] = [ item ]
+                component["licenses"] = [item]
         if self.include_purl:
             component["purl"] = f"pkg:{self.package_manager}/{name}@{version}"
         self.component.append(component)
 
-    def generateXMLComponent(self, id, type, name, supplier, version, identified_licence):
+    def generateXMLComponent(
+        self, id, type, name, supplier, version, identified_licence
+    ):
         self.store(f'<component type="{type}" bom-ref="{id}">')
         self.store(f"<name>{name}</name>")
         self.store(f"<version>{version}</version>")
