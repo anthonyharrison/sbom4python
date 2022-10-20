@@ -65,7 +65,16 @@ class CycloneDXGenerator:
         return self.doc
 
     def getRelationships(self):
-        return self.relationship
+        # Only required for relationships graph. Reformat data
+        relationship_graph = []
+        for relationship in self.relationship:
+            from_id = relationship["ref"]
+            if len(relationship_graph) == 0:
+                # Add root element
+                relationship_graph.append([from_id, from_id, " DESCRIBES "])
+            for depend in relationship["dependsOn"]:
+                relationship_graph.append([from_id, depend, " CONTAINS "])
+        return relationship_graph
 
     def generateTime(self):
         # Generate data/time label in format YYYY-MM-DDThh:mm:ssZ

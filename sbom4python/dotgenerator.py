@@ -14,13 +14,17 @@ class DOTGenerator:
         self.dot.append(text)
 
     def get_package(self, package_id):
-        # Remove SPDXId from package_id if found in package_id.
-        # Expected format is SPDXRef-Package-n-<package>
+        # Extract package name from package identifier.
+        # Supported identifier format is SPDXRef-Package-n-<package> or n-<package>
         prefix = "SPDXRef-Package-"
         if prefix in package_id:
-            # Find package name after package number
+            # Format is SPDXRef-Package-n-<package>
+            # Find package name after package number n
             startpos = len(prefix) + 1
             return package_id[package_id[startpos:].find("-") + startpos + 1 :]
+        elif "-" in package_id:
+            # Format is n-<package>
+            return package_id[package_id.find("-") + 1:]
         return package_id
 
     def set_colour(self, colour):
@@ -67,6 +71,7 @@ class DOTGenerator:
                     if application not in packages:
                         packages.append(application)
                         self.show("\t" + application + implicit_style)
-                self.show("\t" + lib + " -> " + application + ";")
+                if lib != application:
+                    self.show("\t" + lib + " -> " + application + ";")
         self.show("}")
         # end
