@@ -1,8 +1,6 @@
 # Copyright (C) 2022 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
-VERSION = "0.1"
-
 
 class DOTGenerator:
     def __init__(self):
