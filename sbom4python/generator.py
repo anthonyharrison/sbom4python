@@ -102,3 +102,8 @@ class SBOMGenerator:
                         package_set[parent], package_set[product]
                     )
                 id = id + 1
+            else:
+                if parent != "-":
+                    self.bom.generateRelationship(
+                            package_set[parent], package_set[product]
+                        )
