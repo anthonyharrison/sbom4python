@@ -157,7 +157,7 @@ class CycloneDXGenerator:
         component["bom-ref"] = id
         component["name"] = name
         component["version"] = version
-        if supplier != "UNKNOWN":
+        if supplier != "UNKNOWN" and len(supplier) > 0:
             component["author"] = supplier
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             component["cpe"] = f"cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}"
@@ -183,7 +183,7 @@ class CycloneDXGenerator:
         self.store(f'<component type="{type}" bom-ref="{id}">')
         self.store(f"<name>{name}</name>")
         self.store(f"<version>{version}</version>")
-        if supplier != "UNKNOWN":
+        if supplier != "UNKNOWN" and len(supplier) > 0:
             self.store(f"<author>{supplier}</supplier>")
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             self.store(f"<cpe>cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}</cpe>")
