@@ -152,9 +152,11 @@ class SPDXGenerator:
             self.generateTag(
                 "PackageSupplier: Organization", supplier.replace(" ", "_")
             )
-        else:
+        elif len(supplier) > 0:
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             self.generateTag("PackageSupplier: Person", supplier.replace(" ", "_"))
+        else:
+            self.generateTag("PackageSupplier", "NOASSERTION")
         self.generateTag("PackageVersion", version)
         self.generateTag("PackageDownloadLocation", "NOASSERTION")
         self.generateTag("FilesAnalyzed", "false")
@@ -183,9 +185,11 @@ class SPDXGenerator:
         if len(supplier.split()) > 2:
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             component["supplier"] = "Organization: " + supplier.replace(" ", "_")
-        else:
+        elif len(supplier) >0:
             # Supplier name mustn't have spaces in. Covert spaces to '_'
             component["supplier"] = "Person: " + supplier.replace(" ", "_")
+        else:
+            component["supplier"] = "NOASSERTION"
         component["downloadLocation"] = "NONE"
         component["filesAnalyzed"] = False
         component["licenseConcluded"] = self.license_ident(license)
