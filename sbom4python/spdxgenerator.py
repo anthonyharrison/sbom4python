@@ -165,7 +165,7 @@ class SPDXGenerator:
         if self.include_purl:
             self.generateTag(
                 "ExternalRef",
-                f"PACKAGE-MANAGER pkg:{self.package_manager}/{package}@{version}",
+                f"PACKAGE-MANAGER purl pkg:{self.package_manager}/{package}@{version}",
             )
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship
