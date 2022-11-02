@@ -158,8 +158,9 @@ class CycloneDXGenerator:
         component["name"] = name
         component["version"] = version
         if supplier != "UNKNOWN":
+            component["author"] = supplier
             # Supplier name mustn't have spaces in. Covert spaces to '_'
-            component["cpe"] = f"cpe:/a:{supplier.replace(' ', '_')}:{name}:{version}"
+            component["cpe"] = f"cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}"
         if identified_licence != "":
             license_id = self.license.find_license(identified_licence)
             # Only include if valid license
@@ -183,8 +184,9 @@ class CycloneDXGenerator:
         self.store(f"<name>{name}</name>")
         self.store(f"<version>{version}</version>")
         if supplier != "UNKNOWN":
+            self.store(f"<author>{supplier}</supplier>")
             # Supplier name mustn't have spaces in. Covert spaces to '_'
-            self.store(f"<cpe>cpe:/a:{supplier.replace(' ', '_')}:{name}:{version}</cpe>")
+            self.store(f"<cpe>cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}</cpe>")
         if identified_licence != "":
             license_id = self.license.find_license(identified_licence)
             # Only include if valid license
