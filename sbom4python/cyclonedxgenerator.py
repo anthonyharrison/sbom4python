@@ -1,6 +1,7 @@
-# Copyright (C) 2022 Anthony Harrison
+# Copyright (C) 2023 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
+import re
 import uuid
 from datetime import datetime
 
@@ -149,6 +150,12 @@ class CycloneDXGenerator:
         else:
             self.generateJSONComponent(id, type, name, supplier, version, licence)
 
+    def _format_supplier(self, supplier_info):
+        # Get names, ignore email addresses
+        names = re.findall(r"[a-zA-Z\.\]+ [A-Za-z]+ ", supplier_info)
+        supplier = " ".join(n for n in names)
+        return re.sub(" +", " ", supplier.strip())
+
     def generateJSONComponent(
         self, id, type, name, supplier, version, identified_licence
     ):
@@ -157,10 +164,13 @@ class CycloneDXGenerator:
         component["bom-ref"] = id
         component["name"] = name
         component["version"] = version
-        if supplier != "UNKNOWN" and len(supplier) > 0:
-            component["author"] = supplier
+        if supplier != "UNKNOWN" and len(supplier) > 1:
+            component_supplier = self._format_supplier(supplier)
+            component["author"] = component_supplier
             # Supplier name mustn't have spaces in. Covert spaces to '_'
-            component["cpe"] = f"cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}"
+            component[
+                "cpe"
+            ] = f"cpe:/a:{component_supplier.replace(' ', '_').lower()}:{name}:{version}"
         if identified_licence != "":
             license_id = self.license.find_license(identified_licence)
             # Only include if valid license
@@ -183,10 +193,13 @@ class CycloneDXGenerator:
         self.store(f'<component type="{type}" bom-ref="{id}">')
         self.store(f"<name>{name}</name>")
         self.store(f"<version>{version}</version>")
-        if supplier != "UNKNOWN" and len(supplier) > 0:
-            self.store(f"<author>{supplier}</supplier>")
+        if supplier != "UNKNOWN" and len(supplier) > 1:
+            component_supplier = self._format_supplier(supplier)
+            self.store(f"<author>{component_supplier}</supplier>")
             # Supplier name mustn't have spaces in. Covert spaces to '_'
-            self.store(f"<cpe>cpe:/a:{supplier.replace(' ', '_').lower()}:{name}:{version}</cpe>")
+            self.store(
+                f"<cpe>cpe:/a:{component_supplier.replace(' ', '_').lower()}:{name}:{version}</cpe>"
+            )
         if identified_licence != "":
             license_id = self.license.find_license(identified_licence)
             # Only include if valid license

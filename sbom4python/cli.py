@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Anthony Harrison
+# Copyright (C) 2023 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
@@ -135,7 +135,7 @@ def main(argv=None):
             "-",
             sbom_scan.get("Name"),
             sbom_scan.get("Version"),
-            sbom_scan.get("Author"),
+            sbom_scan.get("Author") + " " + sbom_scan.get("Author-email"),
             sbom_scan.get("License"),
         ]
     )

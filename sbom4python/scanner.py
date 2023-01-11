@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Anthony Harrison
+# Copyright (C) 2023 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
 import subprocess
@@ -72,7 +72,7 @@ class SBOMScanner:
                             parent.lower().replace("_", "-"),
                             self.get("Name").lower().replace("_", "-"),
                             self.get("Version"),
-                            self.get("Author"),
+                            self.get("Author") + " " + self.get("Author-email"),
                             self.get("License"),
                         ]
                     )

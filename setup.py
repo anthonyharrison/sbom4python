@@ -1,5 +1,8 @@
 from setuptools import find_packages, setup
 
+# Copyright (C) 2023 Anthony Harrison
+# SPDX-License-Identifier: Apache-2.0
+
 from sbom4python.version import VERSION
 
 with open("README.md", encoding="utf-8") as f:
@@ -19,7 +22,7 @@ setup_kwargs = dict(
     author_email='anthony.p.harrison@gmail.com',
     maintainer='Anthony Harrison',
     maintainer_email='anthony.p.harrison@gmail.com',
-    license='Apache_2.0',
+    license='Apache-2.0',
     keywords=["security", "tools", "SBOM", "DevSecOps", "SPDX", "CycloneDX"],
     install_requires=requirements,
     classifiers=[

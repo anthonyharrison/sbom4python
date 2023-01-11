@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Anthony Harrison
+# Copyright (C) 2023 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
 
@@ -12,6 +12,7 @@ class LicenseScanner:
         "Apache Software License",
         "Apache License, Version 2.0",
         "Apache 2.0",
+        "Apache_2.0",
         "Apache 2",
     ]
     DEFAULT_LICENSE = "UNKNOWN"
