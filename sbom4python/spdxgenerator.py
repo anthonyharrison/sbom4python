@@ -140,7 +140,7 @@ class SPDXGenerator:
                     return derived_license
         return "NOASSERTION"
 
-    def _format_supplier(self, supplier_info):
+    def _format_supplier(self, supplier_info, include_email=True):
         # Get names
         names = re.findall(r"[a-zA-Z\.\]+ [A-Za-z]+ ", supplier_info)
         # Get email addresses
@@ -150,7 +150,7 @@ class SPDXGenerator:
             supplier_info,
         )
         supplier = " ".join(n for n in names)
-        if len(emails) > 0:
+        if include_email and len(emails) > 0:
             # Only one email can be specified, so choose last one
             supplier = supplier + "(" + emails[-1] + ")"
         return re.sub(" +", " ", supplier.strip())
@@ -183,6 +183,12 @@ class SPDXGenerator:
                 "ExternalRef",
                 f"PACKAGE-MANAGER purl pkg:{self.package_manager}/{package}@{version}",
             )
+        if len(supplier) > 1:
+            component_supplier = self._format_supplier(supplier, include_email=False)
+            self.generateTag(
+                "ExternalRef",
+                f"SECURITY cpe23Type cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*",
+            )
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship
         )
@@ -197,11 +203,9 @@ class SPDXGenerator:
         component["versionInfo"] = version
         # Attempt to detect an organization
         if len(supplier.split()) > 2:
-            # Supplier name mustn't have spaces in. Covert spaces to '_'
-            component["supplier"] = "Organization: " + supplier.replace(" ", "_")
-        elif len(supplier) > 0:
-            # Supplier name mustn't have spaces in. Covert spaces to '_'
-            component["supplier"] = "Person: " + supplier.replace(" ", "_")
+            component["supplier"] = "Organization: " + self._format_supplier(supplier)
+        elif len(supplier) > 1:
+            component["supplier"] = "Person: " + self._format_supplier(supplier)
         else:
             component["supplier"] = "NOASSERTION"
         component["downloadLocation"] = "NONE"
@@ -217,6 +221,18 @@ class SPDXGenerator:
             ] = f"pkg:{self.package_manager}/{package}@{version}"
             purl_data["referenceType"] = "purl"
             component["externalRefs"] = [purl_data]
+        if len(supplier) > 1:
+            component_supplier = self._format_supplier(supplier, include_email=False)
+            cpe_data = dict()
+            cpe_data["referenceCategory"] = "SECURITY"
+            cpe_data[
+                "referenceLocator"
+            ] = f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*"
+            cpe_data["referenceType"] = "cpe23Type"
+            if "externalRefs" in component:
+                component["externalRefs"].append(cpe_data)
+            else:
+                component["externalRefs"] = [cpe_data]
         self.component.append(component)
         self.generateRelationship(
             self.package_ident(parent_id), package_id, relationship
