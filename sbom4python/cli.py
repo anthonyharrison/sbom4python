@@ -133,7 +133,7 @@ def main(argv=None):
     sbom_scan.add(
         [
             "-",
-            sbom_scan.get("Name"),
+            sbom_scan.get("Name").lower().replace("_", "-"),
             sbom_scan.get("Version"),
             sbom_scan.get("Author") + " " + sbom_scan.get("Author-email"),
             sbom_scan.get("License"),
