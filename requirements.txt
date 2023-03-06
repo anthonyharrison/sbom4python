@@ -1,2 +1,3 @@
 lib4sbom
 sbom4files
+sbom2dot

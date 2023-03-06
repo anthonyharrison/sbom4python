@@ -6,14 +6,17 @@ import sys
 import textwrap
 from collections import ChainMap
 
-from sbom4python.dotgenerator import DOTGenerator
-from sbom4python.generator import SBOMGenerator
-from sbom4python.output import SBOMOutput
+# from sbom4python.output import SBOMOutput
 from sbom4python.scanner import SBOMScanner
 from sbom4python.version import VERSION
 
-# CLI processing
+from sbom2dot.dotgenerator import DOTGenerator
 
+from lib4sbom.generator import SBOMGenerator
+from lib4sbom.output import SBOMOutput
+from lib4sbom.sbom import SBOM
+
+# CLI processing
 
 def main(argv=None):
 
@@ -43,6 +46,12 @@ def main(argv=None):
         action="store_true",
         help="suppress detecting the license of components",
     )
+    input_group.add_argument(
+        "--include-file",
+        action="store_true",
+        default=False,
+        help="include reporting files associated with module",
+    )
 
     output_group = parser.add_argument_group("Output")
     output_group.add_argument(
@@ -63,7 +72,7 @@ def main(argv=None):
         "--format",
         action="store",
         default="tag",
-        choices=["tag", "json", "xml"],
+        choices=["tag", "json", "yaml"],
         help="specify format of software bill of materials (sbom) (default: tag)",
     )
 
@@ -87,6 +96,7 @@ def main(argv=None):
 
     defaults = {
         "module": "",
+        "include_file": False,
         "exclude_license": False,
         "output_file": "",
         "sbom": "spdx",
@@ -105,63 +115,43 @@ def main(argv=None):
 
     # Ensure format is aligned with type of SBOM
     bom_format = args["format"]
-    if args["sbom"] == "spdx":
-        # XML not valid for SPDX
-        if bom_format == "xml":
-            bom_format = "tag"
-    else:
-        # Tag not valid for CycloneDX
-        if bom_format == "tag":
+    if args["sbom"] == "cyclonedx":
+        # Only JSON format valid for CycloneDX
+        if bom_format != "json":
             bom_format = "json"
 
     if args["debug"]:
         print("Exclude Licences:", args["exclude_license"])
+        print("Include Files:", args["include_file"])
         print("SBOM type:", args["sbom"])
         print("Format:", bom_format)
         print("Output file:", args["output_file"])
         print("Graph file:", args["graph"])
         print(f"Analysing {module_name}")
 
-    sbom_scan = SBOMScanner(args["debug"])
-    sbom_scan.set_module(module_name)
-    sbom_scan.process_module()
-
-    # If module not found, abort processing
-    if not sbom_scan.valid_module():
-        return -1
-
-    sbom_scan.add(
-        [
-            "-",
-            sbom_scan.get("Name").lower().replace("_", "-"),
-            sbom_scan.get("Version"),
-            sbom_scan.get("Author") + " " + sbom_scan.get("Author-email"),
-            sbom_scan.get("License"),
-        ]
-    )
-    sbom_scan.analyze(sbom_scan.get("Name"), sbom_scan.get("Requires"))
+    sbom_scan = SBOMScanner(args["debug"], args["include_file"], args["exclude_license"])
+    sbom_scan.process_python_module(module_name)
 
     # Generate SBOM file
-    sbom_gen = SBOMGenerator(
-        args["exclude_license"], args["sbom"], bom_format, app_name, VERSION, "pypi"
-    )
-    sbom_out = SBOMOutput(args["output_file"], bom_format)
+    python_sbom = SBOM()
+    python_sbom.add_files(sbom_scan.get_files())
+    python_sbom.add_packages(sbom_scan.get_packages())
+    python_sbom.add_relationships(sbom_scan.get_relationships())
 
-    if args["sbom"] == "spdx":
-        sbom_gen.generate_spdx(module_name, sbom_scan.get_record())
-        sbom_out.generate_output(sbom_gen.get_spdx())
-    else:
-        sbom_gen.generate_cyclonedx(module_name, sbom_scan.get_record())
-        sbom_out.generate_output(sbom_gen.get_cyclonedx())
+    sbom_gen = SBOMGenerator(sbom_type=args["sbom"], format=bom_format, application = app_name, version = VERSION)
+    sbom_gen.generate(
+        project_name=sbom_scan.get_parent(),
+        sbom_data=python_sbom.get_sbom(),
+        filename=args["output_file"],
+    )
 
     if len(args["graph"]) > 0:
-        sbom_dot = DOTGenerator()
-        sbom_dot.generatedot(sbom_gen.get_relationships())
+        sbom_dot = DOTGenerator(python_sbom.get_sbom()["packages"])
+        sbom_dot.generatedot(python_sbom.get_sbom()["relationships"])
         dot_out = SBOMOutput(args["graph"], "dot")
         dot_out.generate_output(sbom_dot.getDOT())
 
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
