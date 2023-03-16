@@ -90,7 +90,7 @@ which is provided to the tool. Unfortunately, the tool is unable to determine th
 are therefore reminded that they should assert the quality of any data which is provided to the tool.
 
 Whilst [PURL](https://github.com/package-url/purl-spec) and [CPE](https://nvd.nist.gov/products/cpe) references are automatically generated for each Python module, the accuracy
-of such references cannot be guaranteed as they are dependent on the validity of the data assoicated with the Python module.
+of such references cannot be guaranteed as they are dependent on the validity of the data associated with the Python module.
 
 ## Feedback and Contributions
 
