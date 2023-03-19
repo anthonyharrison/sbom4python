@@ -35,16 +35,12 @@ setup_kwargs = dict(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
     python_requires=">=3.7",
     packages=find_packages(),
-    package_data={
-        "sbom4python": [
-            "license_data/*.json",
-        ],
-    },
     entry_points={
         "console_scripts": [
             "sbom4python = sbom4python.cli:main",
