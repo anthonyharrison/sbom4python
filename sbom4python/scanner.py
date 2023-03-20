@@ -47,11 +47,34 @@ class SBOMScanner:
         if not self.include_license and len(license) > 0:
             if license != "UNKNOWN":
                 derived_license = self.license.find_license(license)
+                if self.debug:
+                    print (f"{license} => {derived_license}")
                 if derived_license != "UNKNOWN":
+                    # Found a match with SPDX Id
                     return derived_license
-                # Not an SPDX License id
-                return license
         return "NOASSERTION"
+
+    def process_license_expression(self, license_expression):
+        # Multiple liceneses can be specified and connected using boolean logic.
+        boolean_operator = ["AND", "OR"]
+        # Detect if multiple licences specified by looking for presence of one or more boolean operators
+        multiple_licenses = False
+        for operator in boolean_operator:
+            # Assume all operators have a following space to avoid matches for licences such as GPL-3.0-or-later
+            if operator + " " in license_expression.upper():
+                multiple_licenses = True
+        if not multiple_licenses:
+            return self.license_ident(license_expression)
+        # Remove brackets and split into elements (will include boolean operators)
+        license_information = license_expression.replace("(","").replace(")","").split(" ")
+        # Now process license information and build up list of valid licenses
+        license_data = []
+        for license in license_information:
+            if license.upper() not in boolean_operator:
+                # Assume we have a license!
+                license_data.append(self.license_ident(license))
+        # Return expression if all licenses are valid
+        return license_expression if "NOASSERTION" not in license_data else "NOASSERTION"
 
     def _format_supplier(self, supplier_info, include_email=True):
         # See https://stackoverflow.com/questions/1207457/convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
@@ -90,9 +113,17 @@ class SBOMScanner:
             self.sbom_package.set_name(package)
             self.sbom_package.set_version(version)
             self.sbom_package.set_filesanalysis(self.include_file)
-            license = self.license_ident(self.get("License"))
-            self.sbom_package.set_licensedeclared(license)
+            license = self.process_license_expression(self.get("License"))
+            # Report license as reported by metadata. If not valid SPDX, report NOASSERTION
+            if license != self.get("License"):
+                self.sbom_package.set_licensedeclared("NOASSERTION")
+            else:
+                self.sbom_package.set_licensedeclared(license)
+            # Report license if valid SPDX identifier
             self.sbom_package.set_licenseconcluded(license)
+            # Add comment if metadata license was modified
+            if len(self.get("License")) > 0 and license != self.get("License"):
+                self.sbom_package.set_licensecomments(f"{self.get('Name')} declares {self.get('License')} which is not a valid SPDX License identifier or expression.")
             supplier = self.get("Author") + " " + self.get("Author-email")
             if len(supplier.split()) > 3:
                 self.sbom_package.set_supplier("Organization", self._format_supplier(supplier))
@@ -143,9 +174,7 @@ class SBOMScanner:
         return (len(out) > 0)
 
     def get(self, attribute):
-        if attribute in self.metadata:
-            return self.metadata[attribute].lstrip()
-        return ""
+        return self.metadata.get(attribute,"").lstrip()
 
     def get_files(self):
         return self.sbom_files
