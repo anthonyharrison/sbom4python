@@ -25,12 +25,12 @@ class SBOMScanner:
         self.include_license = exclude_license
         self.sbom_package = SBOMPackage()
         self.sbom_relationship = SBOMRelationship()
+        self.file_scanner = FileScanner()
         self.license = LicenseScanner()
         self.sbom_files = {}
         self.sbom_packages = {}
         self.sbom_relationships = []
         self.parent = "NOT_DEFINED"
-        self.file_scanner = FileScanner()
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
@@ -42,39 +42,6 @@ class SBOMScanner:
         params = command_line.split()
         res = subprocess.run(params, capture_output=True, text=True)
         return res.stdout.splitlines()
-
-    def license_ident(self, license):
-        if not self.include_license and len(license) > 0:
-            if license != "UNKNOWN":
-                derived_license = self.license.find_license(license)
-                if self.debug:
-                    print (f"{license} => {derived_license}")
-                if derived_license != "UNKNOWN":
-                    # Found a match with SPDX Id
-                    return derived_license
-        return "NOASSERTION"
-
-    def process_license_expression(self, license_expression):
-        # Multiple liceneses can be specified and connected using boolean logic.
-        boolean_operator = ["AND", "OR"]
-        # Detect if multiple licences specified by looking for presence of one or more boolean operators
-        multiple_licenses = False
-        for operator in boolean_operator:
-            # Assume all operators have a following space to avoid matches for licences such as GPL-3.0-or-later
-            if operator + " " in license_expression.upper():
-                multiple_licenses = True
-        if not multiple_licenses:
-            return self.license_ident(license_expression)
-        # Remove brackets and split into elements (will include boolean operators)
-        license_information = license_expression.replace("(","").replace(")","").split(" ")
-        # Now process license information and build up list of valid licenses
-        license_data = []
-        for license in license_information:
-            if license.upper() not in boolean_operator:
-                # Assume we have a license!
-                license_data.append(self.license_ident(license))
-        # Return expression if all licenses are valid
-        return license_expression if "NOASSERTION" not in license_data else "NOASSERTION"
 
     def _format_supplier(self, supplier_info, include_email=True):
         # See https://stackoverflow.com/questions/1207457/convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
@@ -113,7 +80,7 @@ class SBOMScanner:
             self.sbom_package.set_name(package)
             self.sbom_package.set_version(version)
             self.sbom_package.set_filesanalysis(self.include_file)
-            license = self.process_license_expression(self.get("License"))
+            license = self.license.find_license(self.get("License"))
             # Report license as reported by metadata. If not valid SPDX, report NOASSERTION
             if license != self.get("License"):
                 self.sbom_package.set_licensedeclared("NOASSERTION")
