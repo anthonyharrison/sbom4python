@@ -6,17 +6,17 @@ import sys
 import textwrap
 from collections import ChainMap
 
+from lib4sbom.generator import SBOMGenerator
+from lib4sbom.output import SBOMOutput
+from lib4sbom.sbom import SBOM
+from sbom2dot.dotgenerator import DOTGenerator
+
 # from sbom4python.output import SBOMOutput
 from sbom4python.scanner import SBOMScanner
 from sbom4python.version import VERSION
 
-from sbom2dot.dotgenerator import DOTGenerator
-
-from lib4sbom.generator import SBOMGenerator
-from lib4sbom.output import SBOMOutput
-from lib4sbom.sbom import SBOM
-
 # CLI processing
+
 
 def main(argv=None):
 
@@ -129,7 +129,9 @@ def main(argv=None):
         print("Graph file:", args["graph"])
         print(f"Analysing {module_name}")
 
-    sbom_scan = SBOMScanner(args["debug"], args["include_file"], args["exclude_license"])
+    sbom_scan = SBOMScanner(
+        args["debug"], args["include_file"], args["exclude_license"]
+    )
     sbom_scan.process_python_module(module_name)
 
     # Generate SBOM file
@@ -138,7 +140,9 @@ def main(argv=None):
     python_sbom.add_packages(sbom_scan.get_packages())
     python_sbom.add_relationships(sbom_scan.get_relationships())
 
-    sbom_gen = SBOMGenerator(sbom_type=args["sbom"], format=bom_format, application = app_name, version = VERSION)
+    sbom_gen = SBOMGenerator(
+        sbom_type=args["sbom"], format=bom_format, application=app_name, version=VERSION
+    )
     sbom_gen.generate(
         project_name=sbom_scan.get_parent(),
         sbom_data=python_sbom.get_sbom(),
@@ -152,6 +156,7 @@ def main(argv=None):
         dot_out.generate_output(sbom_dot.getDOT())
 
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

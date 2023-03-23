@@ -1,16 +1,15 @@
 # Copyright (C) 2023 Anthony Harrison
 # SPDX-License-Identifier: Apache-2.0
 
-import subprocess
 import pathlib
 import re
+import subprocess
+import unicodedata
 
 from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
 from sbom4files.filescanner import FileScanner
-
-import unicodedata
 
 
 class SBOMScanner:
@@ -46,7 +45,11 @@ class SBOMScanner:
     def _format_supplier(self, supplier_info, include_email=True):
         # See https://stackoverflow.com/questions/1207457/convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
         # And convert byte object to a string
-        name_str = unicodedata.normalize('NFKD', supplier_info).encode('ascii', 'ignore').decode("utf-8")
+        name_str = (
+            unicodedata.normalize("NFKD", supplier_info)
+            .encode("ascii", "ignore")
+            .decode("utf-8")
+        )
         # Get names
         names = re.findall(r"[a-zA-Z\.\]+ [A-Za-z]+ ", name_str)
         # Get email addresses
@@ -71,9 +74,11 @@ class SBOMScanner:
             for line in out:
                 entry = line.split(":")
                 # store all data after keyword
-                self.metadata[entry[0]] = line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
+                self.metadata[entry[0]] = (
+                    line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
+                )
             if self.debug:
-                print (f"Metadata for {module}\n{self.metadata}")
+                print(f"Metadata for {module}\n{self.metadata}")
             self.sbom_package.initialise()
             package = self.get("Name").lower().replace("_", "-")
             version = self.get("Version")
@@ -90,58 +95,95 @@ class SBOMScanner:
             self.sbom_package.set_licenseconcluded(license)
             # Add comment if metadata license was modified
             if len(self.get("License")) > 0 and license != self.get("License"):
-                self.sbom_package.set_licensecomments(f"{self.get('Name')} declares {self.get('License')} which is not a valid SPDX License identifier or expression.")
+                self.sbom_package.set_licensecomments(
+                    f"{self.get('Name')} declares {self.get('License')} which is not a valid SPDX License identifier or expression."
+                )
             supplier = self.get("Author") + " " + self.get("Author-email")
             if len(supplier.split()) > 3:
-                self.sbom_package.set_supplier("Organization", self._format_supplier(supplier))
+                self.sbom_package.set_supplier(
+                    "Organization", self._format_supplier(supplier)
+                )
             elif len(supplier) > 1:
-                self.sbom_package.set_supplier("Person", self._format_supplier(supplier))
+                self.sbom_package.set_supplier(
+                    "Person", self._format_supplier(supplier)
+                )
             else:
                 self.sbom_package.set_supplier("UNKNOWN", "NOASSERTION")
             if self.get("Home-page") != "":
                 self.sbom_package.set_homepage(self.get("Home-page"))
             if self.get("Summary") != "":
-                self.sbom_package.set_summary(self.get('Summary'))
-            self.sbom_package.set_downloadlocation(f'https://pypi.org/project/{self.get("Name")}/{version}')
+                self.sbom_package.set_summary(self.get("Summary"))
+            self.sbom_package.set_downloadlocation(
+                f'https://pypi.org/project/{self.get("Name")}/{version}'
+            )
             # External references
-            self.sbom_package.set_externalreference("PACKAGE-MANAGER", "purl", f"pkg:pypi/{package}@{version}")
+            self.sbom_package.set_externalreference(
+                "PACKAGE-MANAGER", "purl", f"pkg:pypi/{package}@{version}"
+            )
             if len(supplier) > 1:
-                component_supplier = self._format_supplier(supplier, include_email=False)
-                self.sbom_package.set_externalreference("SECURITY", "cpe23Type", f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*")
+                component_supplier = self._format_supplier(
+                    supplier, include_email=False
+                )
+                self.sbom_package.set_externalreference(
+                    "SECURITY",
+                    "cpe23Type",
+                    f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*",
+                )
             # Store package data
-            self.sbom_packages[(self.sbom_package.get_name(), self.sbom_package.get_value('version'))] = self.sbom_package.get_package()
+            self.sbom_packages[
+                (self.sbom_package.get_name(), self.sbom_package.get_value("version"))
+            ] = self.sbom_package.get_package()
             # Add relationship
             self.sbom_relationship.initialise()
             if parent != "-":
-                self.sbom_relationship.set_relationship(parent.lower(), "DEPENDS_ON", package)
+                self.sbom_relationship.set_relationship(
+                    parent.lower(), "DEPENDS_ON", package
+                )
             else:
-                self.sbom_relationship.set_relationship(self.parent, "DESCRIBES", package)
+                self.sbom_relationship.set_relationship(
+                    self.parent, "DESCRIBES", package
+                )
             self.sbom_relationships.append(self.sbom_relationship.get_relationship())
             if self.include_file:
                 directory_location = f'{self.get("Location")}/{self.get("Name").lower().replace("-","_")}'
                 file_dir = pathlib.Path(directory_location)
                 if file_dir.exists():
-                    filtered = [x for x in file_dir.glob("**/*") if x.name.endswith(".py")]
+                    filtered = [
+                        x for x in file_dir.glob("**/*") if x.name.endswith(".py")
+                    ]
                 else:
                     # Module is only a single file
-                    filtered = [pathlib.Path(f'{self.get("Location")}/{self.get("Name").lower().replace("-","_")}.py')]
+                    filtered = [
+                        pathlib.Path(
+                            f'{self.get("Location")}/{self.get("Name").lower().replace("-","_")}.py'
+                        )
+                    ]
                 for entry in filtered:
                     if self.debug:
-                        print (f'Analyse file in {entry}')
+                        print(f"Analyse file in {entry}")
                     if self.file_scanner.scan_file(entry):
-                        self.sbom_files[self.file_scanner.get_name()] = self.file_scanner.get_file()
+                        self.sbom_files[
+                            self.file_scanner.get_name()
+                        ] = self.file_scanner.get_file()
                         # Add relationship
                         self.sbom_relationship.initialise()
-                        self.sbom_relationship.set_relationship(package, "CONTAINS", self.file_scanner.get_name())
-                        self.sbom_relationship.set_relationship_id(self.sbom_package.get_value("id"), self.file_scanner.get_value("id"))
+                        self.sbom_relationship.set_relationship(
+                            package, "CONTAINS", self.file_scanner.get_name()
+                        )
+                        self.sbom_relationship.set_relationship_id(
+                            self.sbom_package.get_value("id"),
+                            self.file_scanner.get_value("id"),
+                        )
                         self.sbom_relationship.set_target_type("file")
-                        self.sbom_relationships.append(self.sbom_relationship.get_relationship())
+                        self.sbom_relationships.append(
+                            self.sbom_relationship.get_relationship()
+                        )
         elif self.debug:
             print(f"Module {module} not found")
-        return (len(out) > 0)
+        return len(out) > 0
 
     def get(self, attribute):
-        return self.metadata.get(attribute,"").lstrip()
+        return self.metadata.get(attribute, "").lstrip()
 
     def get_files(self):
         return self.sbom_files
@@ -151,7 +193,7 @@ class SBOMScanner:
 
     def get_relationships(self):
         if self.debug:
-            print (self.sbom_relationships)
+            print(self.sbom_relationships)
         return self.sbom_relationships
 
     def get_parent(self):
