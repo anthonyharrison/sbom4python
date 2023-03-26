@@ -11,7 +11,6 @@ from lib4sbom.output import SBOMOutput
 from lib4sbom.sbom import SBOM
 from sbom2dot.dotgenerator import DOTGenerator
 
-# from sbom4python.output import SBOMOutput
 from sbom4python.scanner import SBOMScanner
 from sbom4python.version import VERSION
 
