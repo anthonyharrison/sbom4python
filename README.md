@@ -70,7 +70,7 @@ The tool attempts to determine the license of each module. This can be suppresse
 which case all licences are reported as 'NOASSERTION'.
 
 The tool can optionally include the files associated with the installed module. This can be specified using the `--include-file` option. As the filenames are
-relative to the directory in which the tool is invoked, it is recommended that the tool is launced in a directory where the source files are available.
+relative to the directory in which the tool is invoked, it is recommended that the tool is launched in a directory where the source files are available.
 
 The `--graph` option is used to generate a dependency graph of the components within the SBOM. The format of the graph
 file is compatible with the [DOT language](https://graphviz.org/doc/info/lang.html) used by the
