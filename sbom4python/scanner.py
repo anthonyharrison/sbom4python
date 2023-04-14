@@ -72,15 +72,17 @@ class SBOMScanner:
         if self.debug:
             print(f"Process Module {module}")
         out = self.run_program(f"pip show {module}")
-        # If module not found, no metadata returned
+        # If: module not found, no metadata returned
         if len(out) > 0:
             self.metadata = {}
             for line in out:
                 entry = line.split(":")
-                # store all data after keyword
-                self.metadata[entry[0]] = (
-                    line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
-                )
+                # If: this line contain an non empty entry delimited by ':'
+                if ((len(entry) == 2) and
+                        (entry[1] and not (entry[1].isspace()))):
+                    # then: store all data after keyword
+                    self.metadata[entry[0]] = (
+                        line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n"))
             if self.debug:
                 print(f"Metadata for {module}\n{self.metadata}")
             self.sbom_package.initialise()
