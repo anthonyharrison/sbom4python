@@ -78,11 +78,11 @@ class SBOMScanner:
             for line in out:
                 entry = line.split(":")
                 # If: this line contain an non empty entry delimited by ':'
-                if ((len(entry) == 2) and
-                        (entry[1] and not (entry[1].isspace()))):
+                if (len(entry) == 2) and (entry[1] and not (entry[1].isspace())):
                     # then: store all data after keyword
                     self.metadata[entry[0]] = (
-                        line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n"))
+                        line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
+                    )
             if self.debug:
                 print(f"Metadata for {module}\n{self.metadata}")
             self.sbom_package.initialise()
@@ -106,9 +106,9 @@ class SBOMScanner:
             if len(self.get("License")) > 0 and license != self.get("License"):
                 license_comment = f"{self.get('Name')} declares {self.get('License')} which is not currently a valid SPDX License identifier or expression."
             # Report if license is deprecated
-            if self.license.deprecated(license)
+            if self.license.deprecated(license):
                 deprecated_comment = f"{license} is now deprecated."
-                if len(license_comment) >0:
+                if len(license_comment) > 0:
                     license_comment = f"{license_comment} {deprecated_comment}"
                 else:
                     license_comment = deprecated_comment
