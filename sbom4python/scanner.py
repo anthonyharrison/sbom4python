@@ -102,10 +102,18 @@ class SBOMScanner:
             # Report license if valid SPDX identifier
             self.sbom_package.set_licenseconcluded(license)
             # Add comment if metadata license was modified
+            license_comment = ""
             if len(self.get("License")) > 0 and license != self.get("License"):
-                self.sbom_package.set_licensecomments(
-                    f"{self.get('Name')} declares {self.get('License')} which is not currently a valid SPDX License identifier or expression."
-                )
+                license_comment = f"{self.get('Name')} declares {self.get('License')} which is not currently a valid SPDX License identifier or expression."
+            # Report if license is deprecated
+            if self.license.deprecated(license)
+                deprecated_comment = f"{license} is now deprecated."
+                if len(license_comment) >0:
+                    license_comment = f"{license_comment} {deprecated_comment}"
+                else:
+                    license_comment = deprecated_comment
+            if len(license_comment) > 0:
+                self.sbom_package.set_licensecomments(license_comment)
             supplier = self.get("Author") + " " + self.get("Author-email")
             if len(supplier.split()) > 3:
                 self.sbom_package.set_supplier(
