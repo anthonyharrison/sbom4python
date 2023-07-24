@@ -1,3 +1,3 @@
 lib4sbom >= 0.4.0
-sbom4files >= 0.2.2
-sbom2dot
+sbom4files >= 0.3.0
+sbom2dot >= 0.3.0
