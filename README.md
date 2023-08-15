@@ -25,6 +25,23 @@ if you are using different versions of python. `virtualenv` is a tool for settin
 allows you to have all the dependencies for the tool set up in a single environment, or have different environments set
 up for testing using different versions of Python.
 
+### Issues with Windows Installation
+
+When running on Windows, if you get the following error
+
+`ImportError: failed to find libmagic.  Check your installation`
+
+This is because of a mismatch with the installation of the magic library. To resolve, please issue the following commands
+
+```bash
+pip uninstall python-magic
+pip uninstall python-magic-bin
+
+pip install python-magic
+pip install python-magic-bin
+```
+
+
 ## Usage
 
 ```bash
