@@ -89,6 +89,7 @@ class SBOMScanner:
             package = self.get("Name").lower().replace("_", "-")
             version = self.get("Version")
             self.sbom_package.set_name(package)
+            self.sbom_package.set_property("language", "Python")
             self.sbom_package.set_version(version)
             if parent == "-":
                 self.sbom_package.set_type("application")
