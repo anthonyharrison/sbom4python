@@ -7,11 +7,11 @@ import re
 import subprocess
 import unicodedata
 
+from lib4package.metadata import Metadata
 from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
 from sbom4files.filescanner import FileScanner
-from lib4package.metadata import Metadata
 
 
 class SBOMScanner:
