@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pathlib
+import platform
 import re
 import subprocess
 import unicodedata
@@ -10,6 +11,7 @@ from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
 from sbom4files.filescanner import FileScanner
+from lib4package.metadata import Metadata
 
 
 class SBOMScanner:
@@ -30,6 +32,8 @@ class SBOMScanner:
         self.sbom_packages = {}
         self.sbom_relationships = []
         self.parent = "NOT_DEFINED"
+        self.package_metadata = Metadata("python", debug=self.debug)
+        self.python_version = platform.python_version()
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
@@ -90,6 +94,7 @@ class SBOMScanner:
             version = self.get("Version")
             self.sbom_package.set_name(package)
             self.sbom_package.set_property("language", "Python")
+            self.sbom_package.set_property("python_version", self.python_version)
             self.sbom_package.set_version(version)
             if parent == "-":
                 self.sbom_package.set_type("application")
@@ -146,6 +151,10 @@ class SBOMScanner:
                     "cpe23Type",
                     f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*",
                 )
+            self.package_metadata.get_package(package)
+            checksum = self.package_metadata.get_checksum(version=version)
+            if checksum is not None:
+                self.sbom_package.set_checksum("SHA1", checksum)
             # Store package data
             self.sbom_packages[
                 (self.sbom_package.get_name(), self.sbom_package.get_value("version"))
