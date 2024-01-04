@@ -146,10 +146,11 @@ class SBOMScanner:
                 component_supplier = self._format_supplier(
                     supplier, include_email=False
                 )
+                cpe_version = version.replace(':','\\:')
                 self.sbom_package.set_externalreference(
                     "SECURITY",
                     "cpe23Type",
-                    f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{version}:*:*:*:*:*:*:*",
+                    f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*",
                 )
             self.package_metadata.get_package(package)
             checksum = self.package_metadata.get_checksum(version=version)
