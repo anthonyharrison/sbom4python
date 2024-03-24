@@ -26,7 +26,7 @@ setup_kwargs = dict(
     keywords=["security", "tools", "SBOM", "DevSecOps", "SPDX", "CycloneDX"],
     install_requires=requirements,
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         "Natural Language :: English",
@@ -36,6 +36,7 @@ setup_kwargs = dict(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
