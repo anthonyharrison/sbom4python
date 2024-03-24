@@ -139,19 +139,13 @@ class SBOMScanner:
                 f'https://pypi.org/project/{self.get("Name")}/{version}'
             )
             # External references
-            self.sbom_package.set_externalreference(
-                "PACKAGE-MANAGER", "purl", f"pkg:pypi/{package}@{version}"
-            )
+            self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
             if len(supplier) > 1:
                 component_supplier = self._format_supplier(
                     supplier, include_email=False
                 )
                 cpe_version = version.replace(':','\\:')
-                self.sbom_package.set_externalreference(
-                    "SECURITY",
-                    "cpe23Type",
-                    f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*",
-                )
+                self.sbom_package.set_cpe(f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*")
             self.package_metadata.get_package(package)
             checksum = self.package_metadata.get_checksum(version=version)
             if checksum is not None:
