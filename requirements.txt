@@ -1,4 +1,4 @@
 lib4sbom >= 0.7.0
-sbom4files >= 0.3.0
+sbom4files >= 0.4.0
 sbom2dot >= 0.3.0
 lib4package
