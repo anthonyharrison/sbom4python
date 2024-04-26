@@ -232,3 +232,18 @@ class SBOMScanner:
         self.set_parent(module_name)
         if self.process_module(module_name):
             self.analyze(self.get("Name"), self.get("Requires"))
+
+    def process_system(self):
+        out = self.run_program("pip list")
+        if len(out) > 0:
+            modules = []
+            # Ignore headers in output stream
+            for m in out[2:]:
+                modules.append(m.split(' ')[0])
+            if self.debug:
+                print (modules)
+            self.set_parent("system")
+            for module_name in modules:
+                if self.process_module(module_name):
+                    self.analyze(self.get("Name"), self.get("Requires"))
+

@@ -41,6 +41,11 @@ def main(argv=None):
         help="identity of python module",
     )
     input_group.add_argument(
+        "--system",
+        action="store_true",
+        help="include all installed python modules within system",
+    )
+    input_group.add_argument(
         "--exclude-license",
         action="store_true",
         help="suppress detecting the license of components",
@@ -97,6 +102,7 @@ def main(argv=None):
         "module": "",
         "include_file": False,
         "exclude_license": False,
+        "system": False,
         "output_file": "",
         "sbom": "spdx",
         "debug": False,
@@ -122,6 +128,8 @@ def main(argv=None):
     if args["debug"]:
         print("Exclude Licences:", args["exclude_license"])
         print("Include Files:", args["include_file"])
+        print("Module", module_name)
+        print("System", args["system"])
         print("SBOM type:", args["sbom"])
         print("Format:", bom_format)
         print("Output file:", args["output_file"])
@@ -131,7 +139,14 @@ def main(argv=None):
     sbom_scan = SBOMScanner(
         args["debug"], args["include_file"], args["exclude_license"]
     )
-    sbom_scan.process_python_module(module_name)
+
+    if len(module_name) > 0:
+        sbom_scan.process_python_module(module_name)
+    elif args["system"]:
+        sbom_scan.process_system()
+    else:
+        print ("[ERROR] Nothing to process")
+        return -1
 
     # Generate SBOM file
     python_sbom = SBOM()

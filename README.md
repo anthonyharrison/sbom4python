@@ -45,25 +45,26 @@ pip install python-magic-bin
 ## Usage
 
 ```bash
-usage: sbom4python [-h] [-m MODULE] [--exclude-license] [--include-file] [-d]
-                   [--sbom {spdx,cyclonedx}] [--format {tag,json,yaml}]
-                   [-o OUTPUT_FILE] [-g GRAPH] [-V]
+usage: sbom4python [-h] [-m MODULE] [--system] [--exclude-license] [--include-file] [-d] [--sbom {spdx,cyclonedx}] [--format {tag,json,yaml}] [-o OUTPUT_FILE] [-g GRAPH] [-V]
 
-optional arguments:
+SBOM4Python generates a Software Bill of Materials for the specified installed Python module identifying all of the dependent components which are explicity defined (typically via requirements.txt file)
+or implicitly as a hidden dependency.
+
+options:
   -h, --help            show this help message and exit
   -V, --version         show program's version number and exit
 
 Input:
   -m MODULE, --module MODULE
                         identity of python module
+  --system              include all installed python modules within system
   --exclude-license     suppress detecting the license of components
   --include-file        include reporting files associated with module
 
 Output:
   -d, --debug           add debug information
   --sbom {spdx,cyclonedx}
-                        specify type of software bill of materials (sbom) to
-                        generate (default: spdx)
+                        specify type of sbom to generate (default: spdx)
   --format {tag,json,yaml}
                         specify format of software bill of materials (sbom) (default: tag)
   -o OUTPUT_FILE, --output-file OUTPUT_FILE
@@ -74,7 +75,8 @@ Output:
 						
 ## Operation
 
-The `--module` option is used to identify the Python module.
+The `--module` option is used to identify the Python module. The `--system` option is used to indicate that the SBOM is to include all installed
+Python modules. Either `--module` or `--system` must be specified
 
 The `--sbom` option is used to specify the format of the generated SBOM (the default is SPDX). The `--format` option
 can be used to specify the formatting of the SBOM (the default is Tag Value format for a SPDX SBOM). JSON format is supported for both
