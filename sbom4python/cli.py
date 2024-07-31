@@ -145,7 +145,7 @@ def main(argv=None):
     elif args["system"]:
         sbom_scan.process_system()
     else:
-        print ("[ERROR] Nothing to process")
+        print("[ERROR] Nothing to process")
         return -1
 
     # Generate SBOM file
