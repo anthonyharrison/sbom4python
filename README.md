@@ -123,7 +123,7 @@ user of the tool is reminded that they should assert the quality of any data whi
 Whilst [PURL](https://github.com/package-url/purl-spec) and [CPE](https://nvd.nist.gov/products/cpe) references are automatically generated for each Python module, the accuracy
 of such references cannot be guaranteed as they are dependent on the validity of the data associated with the Python module.
 
-Network access is required to populate some of the package metadata.
+Network access is required to populate some of the package metadata. If this is not available, a limited amount of package metadata will be included.
 
 ## Feedback and Contributions
 
