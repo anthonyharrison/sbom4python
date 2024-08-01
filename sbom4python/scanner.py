@@ -8,8 +8,8 @@ import subprocess
 import unicodedata
 
 from lib4package.metadata import Metadata
-from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.document import SBOMDocument
+from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
 from sbom4files.filescanner import FileScanner
@@ -20,7 +20,9 @@ class SBOMScanner:
     Simple SBOM Generator for Python module.
     """
 
-    def __init__(self, debug, include_file=False, exclude_license=False, lifecycle="build"):
+    def __init__(
+        self, debug, include_file=False, exclude_license=False, lifecycle="build"
+    ):
         self.record = []
         self.debug = debug
         self.include_file = include_file
@@ -36,7 +38,8 @@ class SBOMScanner:
         self.parent = "NOT_DEFINED"
         self.package_metadata = Metadata("python", debug=self.debug)
         self.python_version = platform.python_version()
-        self.sbom_document.set_value("lifecycle", lifecycle)
+        self.set_lifecycle(lifecycle)
+        self.metadata = {}
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
@@ -48,6 +51,9 @@ class SBOMScanner:
         params = command_line.split()
         res = subprocess.run(params, capture_output=True, text=True)
         return res.stdout.splitlines()
+
+    def set_lifecycle(self, lifecycle):
+        self.sbom_document.set_value("lifecycle", lifecycle)
 
     def _format_supplier(self, supplier_info, include_email=True):
         # See https://stackoverflow.com/questions/1207457/convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
@@ -75,6 +81,82 @@ class SBOMScanner:
             supplier = supplier + "(" + emails[-1] + ")"
         return re.sub(" +", " ", supplier.strip())
 
+    def _create_package(self, package, version, parent="-"):
+        self.sbom_package.initialise()
+        self.package_metadata.get_package(package)
+        self.sbom_package.set_name(package)
+        self.sbom_package.set_property("language", "Python")
+        self.sbom_package.set_property("python_version", self.python_version)
+        self.sbom_package.set_version(version)
+        if parent == "-":
+            self.sbom_package.set_type("application")
+        self.sbom_package.set_filesanalysis(self.include_file)
+        license = self.license.find_license(self.get("License"))
+        # Report license as reported by metadata. If not valid SPDX, report NOASSERTION
+        if license != self.get("License"):
+            self.sbom_package.set_licensedeclared("NOASSERTION")
+        else:
+            self.sbom_package.set_licensedeclared(license)
+        # Report license if valid SPDX identifier
+        self.sbom_package.set_licenseconcluded(license)
+        # Add comment if metadata license was modified
+        license_comment = ""
+        if len(self.get("License")) > 0 and license != self.get("License"):
+            license_comment = f"{self.get('Name')} declares {self.get('License')} which is not currently a valid SPDX License identifier or expression."
+        # Report if license is deprecated
+        if self.license.deprecated(license):
+            deprecated_comment = f"{license} is now deprecated."
+            if len(license_comment) > 0:
+                license_comment = f"{license_comment} {deprecated_comment}"
+            else:
+                license_comment = deprecated_comment
+        if len(license_comment) > 0:
+            self.sbom_package.set_licensecomments(license_comment)
+        supplier = self.get("Author") + " " + self.get("Author-email")
+        if len(supplier.split()) > 3:
+            self.sbom_package.set_supplier(
+                "Organization", self._format_supplier(supplier)
+            )
+        elif len(supplier) > 1:
+            self.sbom_package.set_supplier("Person", self._format_supplier(supplier))
+        else:
+            self.sbom_package.set_supplier("UNKNOWN", "NOASSERTION")
+        if self.get("Home-page") != "":
+            self.sbom_package.set_homepage(self.get("Home-page"))
+        if self.get("Summary") != "":
+            self.sbom_package.set_summary(self.get("Summary"))
+        self.sbom_package.set_downloadlocation(
+            f'https://pypi.org/project/{self.get("Name")}/{version}'
+        )
+        # External references
+        self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
+        if len(supplier) > 1:
+            component_supplier = self._format_supplier(supplier, include_email=False)
+            cpe_version = version.replace(":", "\\:")
+            self.sbom_package.set_cpe(
+                f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*"
+            )
+        checksum = self.package_metadata.get_checksum(version=version)
+        if checksum is not None:
+            self.sbom_package.set_checksum("SHA1", checksum)
+        # Store package data
+        self.sbom_packages[
+            (
+                self.sbom_package.get_name(),
+                self.sbom_package.get_value("version"),
+            )
+        ] = self.sbom_package.get_package()
+
+    def _create_relationship(self, package, parent="-"):
+        self.sbom_relationship.initialise()
+        if parent != "-":
+            self.sbom_relationship.set_relationship(
+                parent.lower(), "DEPENDS_ON", package
+            )
+        else:
+            self.sbom_relationship.set_relationship(self.parent, "DESCRIBES", package)
+        self.sbom_relationships.append(self.sbom_relationship.get_relationship())
+
     def process_module(self, module, parent="-"):
         if self.debug:
             print(f"Process Module {module}")
@@ -93,91 +175,14 @@ class SBOMScanner:
             if self.debug:
                 print(f"Metadata for {module}\n{self.metadata}")
 
-            self.sbom_package.initialise()
             package = self.get("Name").lower().replace("_", "-")
             version = self.get("Version")
             if (package, version) in self.sbom_packages:
                 if self.debug:
                     print(f"Already processed {package} {version}")
             else:
-                self.sbom_package.set_name(package)
-                self.sbom_package.set_property("language", "Python")
-                self.sbom_package.set_property("python_version", self.python_version)
-                self.sbom_package.set_version(version)
-                if parent == "-":
-                    self.sbom_package.set_type("application")
-                self.sbom_package.set_filesanalysis(self.include_file)
-                license = self.license.find_license(self.get("License"))
-                # Report license as reported by metadata. If not valid SPDX, report NOASSERTION
-                if license != self.get("License"):
-                    self.sbom_package.set_licensedeclared("NOASSERTION")
-                else:
-                    self.sbom_package.set_licensedeclared(license)
-                # Report license if valid SPDX identifier
-                self.sbom_package.set_licenseconcluded(license)
-                # Add comment if metadata license was modified
-                license_comment = ""
-                if len(self.get("License")) > 0 and license != self.get("License"):
-                    license_comment = f"{self.get('Name')} declares {self.get('License')} which is not currently a valid SPDX License identifier or expression."
-                # Report if license is deprecated
-                if self.license.deprecated(license):
-                    deprecated_comment = f"{license} is now deprecated."
-                    if len(license_comment) > 0:
-                        license_comment = f"{license_comment} {deprecated_comment}"
-                    else:
-                        license_comment = deprecated_comment
-                if len(license_comment) > 0:
-                    self.sbom_package.set_licensecomments(license_comment)
-                supplier = self.get("Author") + " " + self.get("Author-email")
-                if len(supplier.split()) > 3:
-                    self.sbom_package.set_supplier(
-                        "Organization", self._format_supplier(supplier)
-                    )
-                elif len(supplier) > 1:
-                    self.sbom_package.set_supplier(
-                        "Person", self._format_supplier(supplier)
-                    )
-                else:
-                    self.sbom_package.set_supplier("UNKNOWN", "NOASSERTION")
-                if self.get("Home-page") != "":
-                    self.sbom_package.set_homepage(self.get("Home-page"))
-                if self.get("Summary") != "":
-                    self.sbom_package.set_summary(self.get("Summary"))
-                self.sbom_package.set_downloadlocation(
-                    f'https://pypi.org/project/{self.get("Name")}/{version}'
-                )
-                # External references
-                self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
-                if len(supplier) > 1:
-                    component_supplier = self._format_supplier(
-                        supplier, include_email=False
-                    )
-                    cpe_version = version.replace(":", "\\:")
-                    self.sbom_package.set_cpe(
-                        f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*"
-                    )
-                self.package_metadata.get_package(package)
-                checksum = self.package_metadata.get_checksum(version=version)
-                if checksum is not None:
-                    self.sbom_package.set_checksum("SHA1", checksum)
-                # Store package data
-                self.sbom_packages[
-                    (
-                        self.sbom_package.get_name(),
-                        self.sbom_package.get_value("version"),
-                    )
-                ] = self.sbom_package.get_package()
-            # Add relationship
-            self.sbom_relationship.initialise()
-            if parent != "-":
-                self.sbom_relationship.set_relationship(
-                    parent.lower(), "DEPENDS_ON", package
-                )
-            else:
-                self.sbom_relationship.set_relationship(
-                    self.parent, "DESCRIBES", package
-                )
-            self.sbom_relationships.append(self.sbom_relationship.get_relationship())
+                self._create_package(package, version, parent)
+            self._create_relationship(package, parent)
             if self.include_file:
                 directory_location = f'{self.get("Location")}/{self.get("Name").lower().replace("-","_")}'
                 file_dir = pathlib.Path(directory_location)
@@ -262,3 +267,24 @@ class SBOMScanner:
             for module_name in modules:
                 if self.process_module(module_name):
                     self.analyze(self.get("Name"), self.get("Requires"))
+
+    def process_requirements(self, filename):
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                with open(filename) as dir_file:
+                    lines = dir_file.readlines()
+                self.set_lifecycle("pre-build")
+                for line in lines:
+                    # Extract package and version
+                    component = line.strip().split("==")
+                    if len(component) == 2:
+                        # Package and version found
+                        package = component[0]
+                        version = component[1]
+                        if self.debug:
+                            print(f"Processing {package} version {version}")
+                        self._create_package(package, version)
+                        self._create_relationship(package)

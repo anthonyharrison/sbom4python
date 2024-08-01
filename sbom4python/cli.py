@@ -41,6 +41,13 @@ def main(argv=None):
         help="identity of python module",
     )
     input_group.add_argument(
+        "-r",
+        "--requirement",
+        action="store",
+        default="",
+        help="name of requirements.txt file",
+    )
+    input_group.add_argument(
         "--system",
         action="store_true",
         help="include all installed python modules within system",
@@ -100,6 +107,7 @@ def main(argv=None):
 
     defaults = {
         "module": "",
+        "requirement": "",
         "include_file": False,
         "exclude_license": False,
         "system": False,
@@ -129,6 +137,7 @@ def main(argv=None):
         print("Exclude Licences:", args["exclude_license"])
         print("Include Files:", args["include_file"])
         print("Module", module_name)
+        print("Requirements file", args["requirement"])
         print("System", args["system"])
         print("SBOM type:", args["sbom"])
         print("Format:", bom_format)
@@ -144,6 +153,8 @@ def main(argv=None):
         sbom_scan.process_python_module(module_name)
     elif args["system"]:
         sbom_scan.process_system()
+    elif len(args["requirement"]) > 0:
+        sbom_scan.process_requirements(args["requirement"])
     else:
         print("[ERROR] Nothing to process")
         return -1

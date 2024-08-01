@@ -7,6 +7,8 @@ It identifies all of the dependent components which are
 explicity defined (typically via requirements.txt file) or implicitly as a
 hidden dependency.
 
+It can also be used to create a SBOM from a requirements.txt file. In this case no transitive components will be identified.
+
 It is intended to be used as part of a continuous integration system to enable accurate records of SBOMs to be maintained
 and also to support subsequent audit needs to determine if a particular component (and version) has been used.
 
@@ -57,6 +59,8 @@ options:
 Input:
   -m MODULE, --module MODULE
                         identity of python module
+  -r REQUIREMENT, --requirement REQUIREMENT
+                        name of requirements.txt file
   --system              include all installed python modules within system
   --exclude-license     suppress detecting the license of components
   --include-file        include reporting files associated with module
@@ -76,7 +80,10 @@ Output:
 ## Operation
 
 The `--module` option is used to identify the Python module. The `--system` option is used to indicate that the SBOM is to include all installed
-Python modules. Either `--module` or `--system` must be specified
+Python modules. The `--requirement` option is used to create an SBOM from a requirements.txt file. In this case, no transitive dependencies will be
+identified if this option is specified.
+
+One of `--module`,  `--requirement` or `--system` must be specified. If multiple options are specified, the order of priority is `--module`, `--system` and `--requirement`.
 
 The `--sbom` option is used to specify the format of the generated SBOM (the default is SPDX). The `--format` option
 can be used to specify the formatting of the SBOM (the default is Tag Value format for a SPDX SBOM). JSON format is supported for both
@@ -107,6 +114,8 @@ The tool uses a local copy of the [SPDX Licenses List](https://github.com/spdx/l
 This tool is meant to support software development and security audit functions. However the usefulness of the tool is dependent on the SBOM data
 which is provided to the tool. Unfortunately, the tool is unable to determine the validity or completeness of such a SBOM file; users of the tool
 are therefore reminded that they should assert the quality of any data which is provided to the tool.
+
+The `--requirement` option will only process modules in the file which have pinned versions. Any modules which not specify a version will be ignored.
 
 When processing and validating licenses, the application will use a set of synonyms to attempt to map some license identifiers to the correct [SPDX License Identifiers](https://spdx.org/licenses/). However, the
 user of the tool is reminded that they should assert the quality of any data which is provided by the tool particularly where the license identifier has been modified.
