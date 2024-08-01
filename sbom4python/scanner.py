@@ -89,7 +89,7 @@ class SBOMScanner:
         except:
             offline = True
             if self.debug:
-                print (f"[ERROR] Unable to retrieve metadata for {package}")
+                print(f"[ERROR] Unable to retrieve metadata for {package}")
         self.sbom_package.set_name(package)
         self.sbom_package.set_property("language", "Python")
         self.sbom_package.set_property("python_version", self.python_version)
@@ -154,7 +154,7 @@ class SBOMScanner:
         if summary != "":
             self.sbom_package.set_summary(summary)
         self.sbom_package.set_downloadlocation(
-            f'https://pypi.org/project/{package}/{version}'
+            f"https://pypi.org/project/{package}/{version}"
         )
         # External references
         self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
@@ -220,11 +220,7 @@ class SBOMScanner:
                     ]
                 else:
                     # Module is only a single file
-                    filtered = [
-                        pathlib.Path(
-                            f'{self.get("Location")}/{package}.py'
-                        )
-                    ]
+                    filtered = [pathlib.Path(f'{self.get("Location")}/{package}.py')]
                 for entry in filtered:
                     if self.debug:
                         print(f"Analyse file in {entry}")
