@@ -83,7 +83,13 @@ class SBOMScanner:
 
     def _create_package(self, package, version, parent="-"):
         self.sbom_package.initialise()
-        self.package_metadata.get_package(package)
+        offline = False
+        try:
+            self.package_metadata.get_package(package)
+        except:
+            offline = True
+            if self.debug:
+                print (f"[ERROR] Unable to retrieve metadata for {package}")
         self.sbom_package.set_name(package)
         self.sbom_package.set_property("language", "Python")
         self.sbom_package.set_property("python_version", self.python_version)
@@ -97,7 +103,7 @@ class SBOMScanner:
             supplier = self.get("Author") + " " + self.get("Author-email")
             home_page = self.get("Home-page")
             summary = self.get("Summary")
-        else:
+        elif not offline:
             license_information = self.package_metadata.get_license()
             # Supplier info
             supplier = self.package_metadata.get_originator()
@@ -109,6 +115,11 @@ class SBOMScanner:
             summary = self.package_metadata.get_description()
             if summary is None:
                 summary = ""
+        else:
+            license_information = ""
+            supplier = ""
+            home_page = ""
+            summary = ""
         license = self.license.find_license(license_information)
         # Report license as reported by metadata. If not valid SPDX, report NOASSERTION
         if license != license_information:
