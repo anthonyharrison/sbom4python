@@ -150,6 +150,7 @@ def main(argv=None):
 
     # Generate SBOM file
     python_sbom = SBOM()
+    python_sbom.add_document(sbom_scan.get_document())
     python_sbom.add_files(sbom_scan.get_files())
     python_sbom.add_packages(sbom_scan.get_packages())
     python_sbom.add_relationships(sbom_scan.get_relationships())

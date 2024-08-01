@@ -9,6 +9,7 @@ import unicodedata
 
 from lib4package.metadata import Metadata
 from lib4sbom.data.package import SBOMPackage
+from lib4sbom.data.document import SBOMDocument
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
 from sbom4files.filescanner import FileScanner
@@ -19,13 +20,14 @@ class SBOMScanner:
     Simple SBOM Generator for Python module.
     """
 
-    def __init__(self, debug, include_file=False, exclude_license=False):
+    def __init__(self, debug, include_file=False, exclude_license=False, lifecycle="build"):
         self.record = []
         self.debug = debug
         self.include_file = include_file
         self.include_license = exclude_license
         self.sbom_package = SBOMPackage()
         self.sbom_relationship = SBOMRelationship()
+        self.sbom_document = SBOMDocument()
         self.file_scanner = FileScanner()
         self.license = LicenseScanner()
         self.sbom_files = {}
@@ -34,6 +36,7 @@ class SBOMScanner:
         self.parent = "NOT_DEFINED"
         self.package_metadata = Metadata("python", debug=self.debug)
         self.python_version = platform.python_version()
+        self.sbom_document.set_value("lifecycle", lifecycle)
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
@@ -226,6 +229,9 @@ class SBOMScanner:
         if self.debug:
             print(self.sbom_relationships)
         return self.sbom_relationships
+
+    def get_document(self):
+        return self.sbom_document.get_document()
 
     def get_parent(self):
         return self.parent
