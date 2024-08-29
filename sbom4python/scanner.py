@@ -6,6 +6,7 @@ import platform
 import re
 import subprocess
 import unicodedata
+import ast
 
 from lib4package.metadata import Metadata
 from lib4sbom.data.document import SBOMDocument
@@ -21,12 +22,13 @@ class SBOMScanner:
     """
 
     def __init__(
-        self, debug, include_file=False, exclude_license=False, lifecycle="build"
+        self, debug, include_file=False, exclude_license=False, lifecycle="build", include_service=False
     ):
         self.record = []
         self.debug = debug
         self.include_file = include_file
         self.include_license = exclude_license
+        self.include_service = include_service
         self.sbom_package = SBOMPackage()
         self.sbom_relationship = SBOMRelationship()
         self.sbom_document = SBOMDocument()
@@ -73,7 +75,7 @@ class SBOMScanner:
         # Use RFC-5322 compliant regex (https://regex101.com/library/6EL6YF)
         emails = re.findall(
             r"((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))",
-            supplier_info,
+            supplier_info,re.IGNORECASE
         )
         supplier = " ".join(n for n in names)
         if include_email and len(emails) > 0:
@@ -81,7 +83,7 @@ class SBOMScanner:
             supplier = supplier + "(" + emails[-1] + ")"
         return re.sub(" +", " ", supplier.strip())
 
-    def _create_package(self, package, version, parent="-"):
+    def _create_package(self, package, version, parent="-", requirements = None):
         self.sbom_package.initialise()
         offline = False
         try:
@@ -94,6 +96,8 @@ class SBOMScanner:
         self.sbom_package.set_property("language", "Python")
         self.sbom_package.set_property("python_version", self.python_version)
         self.sbom_package.set_version(version)
+        if requirements is not None:
+            self.sbom_package.set_evidence(requirements)
         if parent == "-":
             self.sbom_package.set_type("application")
         self.sbom_package.set_filesanalysis(self.include_file)
@@ -185,6 +189,56 @@ class SBOMScanner:
             self.sbom_relationship.set_relationship(self.parent, "DESCRIBES", package)
         self.sbom_relationships.append(self.sbom_relationship.get_relationship())
 
+    def analyze_code(self, filename):
+        """Analyzes Python code for potential external service interactions.
+
+        Args:
+            filename: The Python source file.
+
+        Returns:
+            A list of potential external service interactions.
+        """
+        potential_external_services = []
+        modules=["requests", "urllib", "httplib2"]
+        potential_endpoint = []
+        try:
+            with open(filename, "r", errors="replace") as f:
+                source_code = f.read()
+            tree = ast.parse(source_code)
+
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Attribute):
+                    # Check for function calls on http libraries like requests or urllib
+                    if (
+                            isinstance(node.value, ast.Name)
+                            and (node.value.id in modules)
+                            and node.attr in ["get", "post", "put", "delete"]
+                    ):
+                        if [node.value.id, node.attr] not in potential_external_services:
+                            potential_external_services.append([node.value.id, node.attr])
+                elif isinstance(node, ast.Constant):
+                    if node.value is not None:
+                        constant = str(node.value)
+                        if constant.startswith("http") and "//" in constant and len(constant) > 8:
+                            # print (filename, constant)
+                            potential_endpoint.append(constant)
+        except FileNotFoundError:
+            print(f"[ERROR] {filename} not found")
+        except SyntaxError:
+            # print(f"[ERROR] Unable to process {filename}.")
+            pass
+        if len(potential_external_services) > 0 and len(potential_endpoint) > 0:
+            if self.debug:
+                print (f"Potential endpoint in {filename}")
+                for i in potential_endpoint:
+                    print(i)
+                for i in potential_external_services:
+                    print (i)
+
+            return potential_endpoint
+        else:
+            return []
+
     def process_module(self, module, parent="-"):
         if self.debug:
             print(f"Process Module {module}")
@@ -212,8 +266,11 @@ class SBOMScanner:
                 self._create_package(package, version, parent)
             self._create_relationship(package, parent)
             if self.include_file:
+                package = self.get("Name").lower().replace("-", "_")
                 directory_location = f'{self.get("Location")}/{package}'
                 file_dir = pathlib.Path(directory_location)
+                if self.debug:
+                    print (f"Directory for {package}: {file_dir}")
                 if file_dir.exists():
                     filtered = [
                         x for x in file_dir.glob("**/*") if x.name.endswith(".py")
@@ -221,9 +278,16 @@ class SBOMScanner:
                 else:
                     # Module is only a single file
                     filtered = [pathlib.Path(f'{self.get("Location")}/{package}.py')]
+                if self.debug:
+                    print (f"Filenames: {filtered}")
                 for entry in filtered:
                     if self.debug:
                         print(f"Analyse file in {entry}")
+                    if self.include_service:
+                        external_services = self.analyze_code(entry)
+                    # if len(external_services) > 0:
+                    #     print (f"External services in {entry}")
+
                     if self.file_scanner.scan_file(entry):
                         self.sbom_files[
                             self.file_scanner.get_name()
@@ -310,5 +374,5 @@ class SBOMScanner:
                         version = component[1]
                         if self.debug:
                             print(f"Processing {package} version {version}")
-                        self._create_package(package, version)
+                        self._create_package(package, version, requirements = filename)
                         self._create_relationship(package)
