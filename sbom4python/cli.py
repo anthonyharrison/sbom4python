@@ -63,6 +63,12 @@ def main(argv=None):
         default=False,
         help="include reporting files associated with module",
     )
+    input_group.add_argument(
+        "--include-service",
+        action="store_true",
+        default=False,
+        help="include reporting of endpoints",
+    )
 
     output_group = parser.add_argument_group("Output")
     output_group.add_argument(
@@ -109,6 +115,7 @@ def main(argv=None):
         "module": "",
         "requirement": "",
         "include_file": False,
+        "include_service": False,
         "exclude_license": False,
         "system": False,
         "output_file": "",
@@ -136,6 +143,7 @@ def main(argv=None):
     if args["debug"]:
         print("Exclude Licences:", args["exclude_license"])
         print("Include Files:", args["include_file"])
+        print("Include Services:", args["include_service"])
         print("Module", module_name)
         print("Requirements file", args["requirement"])
         print("System", args["system"])
@@ -146,7 +154,7 @@ def main(argv=None):
         print(f"Analysing {module_name}")
 
     sbom_scan = SBOMScanner(
-        args["debug"], args["include_file"], args["exclude_license"]
+        args["debug"], args["include_file"], args["exclude_license"], include_service=args["include_service"]
     )
 
     if len(module_name) > 0:
