@@ -158,7 +158,7 @@ class SBOMScanner:
         if summary != "":
             self.sbom_package.set_summary(summary)
         self.sbom_package.set_downloadlocation(
-            f"https://pypi.org/project/{package}/{version}"
+            f"https://pypi.org/project/{package}/{version}#files"
         )
         # External references
         self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
