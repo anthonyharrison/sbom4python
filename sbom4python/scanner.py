@@ -272,15 +272,16 @@ class SBOMScanner:
                 if self.debug:
                     print (f"Directory for {package}: {file_dir}")
                 if file_dir.exists():
-                    filtered = [
-                        x for x in file_dir.glob("**/*") if x.name.endswith(".py")
-                    ]
+                    filtered = [x for x in file_dir.glob("**/*")]
                 else:
                     # Module is only a single file
-                    filtered = [pathlib.Path(f'{self.get("Location")}/{package}.py')]
+                    filtered = [pathlib.Path(f'{self.get("Location")}/{package}')]
                 if self.debug:
                     print (f"Filenames: {filtered}")
                 for entry in filtered:
+                    # Ignore compiled code
+                    if str(entry).endswith(".pyc"):
+                        continue
                     if self.debug:
                         print(f"Analyse file in {entry}")
                     if self.include_service:
