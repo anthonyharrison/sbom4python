@@ -95,6 +95,10 @@ class SBOMScanner:
         self.sbom_package.set_name(package)
         self.sbom_package.set_property("language", "Python")
         self.sbom_package.set_property("python_version", self.python_version)
+        if not offline:
+            # External metadata may lag releases
+            if self.package_metadata.get_latest_version() == version:
+                self.sbom_package.set_property("package_release_date", self.package_metadata.get_latest_release_time())
         self.sbom_package.set_version(version)
         if requirements is not None:
             self.sbom_package.set_evidence(requirements)
@@ -251,6 +255,11 @@ class SBOMScanner:
                 # If: this line contain an non empty entry delimited by ':'
                 if (len(entry) == 2) and (entry[1] and not (entry[1].isspace())):
                     # then: store all data after keyword
+                    self.metadata[entry[0]] = (
+                        line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
+                    )
+                elif len(entry) > 2:
+                    # Likely to include URL
                     self.metadata[entry[0]] = (
                         line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
                     )
