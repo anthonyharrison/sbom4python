@@ -375,6 +375,7 @@ class SBOMScanner:
                 with open(filename) as dir_file:
                     lines = dir_file.readlines()
                 self.set_lifecycle("pre-build")
+                self.set_parent(filename)
                 for line in lines:
                     # Extract package and version
                     component = line.strip().split("==")
