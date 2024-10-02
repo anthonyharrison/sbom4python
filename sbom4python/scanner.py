@@ -263,15 +263,16 @@ class SBOMScanner:
                     self.metadata[entry[0]] = (
                         line.split(f"{entry[0]}:", 1)[1].strip().rstrip("\n")
                     )
-            if self.debug:
-                print(f"Metadata for {module}\n{self.metadata}")
-
             package = self.get("Name").lower().replace("_", "-")
             version = self.get("Version")
             if (package, version) in self.sbom_packages:
                 if self.debug:
                     print(f"Already processed {package} {version}")
+                # Prevent metadata being reprocessed
+                out = ""
             else:
+                if self.debug:
+                    print(f"Metadata for {module}\n{self.metadata}")
                 self._create_package(package, version, parent)
             self._create_relationship(package, parent)
             if self.include_file:
