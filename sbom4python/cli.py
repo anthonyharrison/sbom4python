@@ -69,6 +69,12 @@ def main(argv=None):
         default=False,
         help="include reporting of endpoints",
     )
+    input_group.add_argument(
+        "--use-pip",
+        action="store_true",
+        default=False,
+        help="use pip for package management",
+    )
 
     output_group = parser.add_argument_group("Output")
     output_group.add_argument(
@@ -117,6 +123,7 @@ def main(argv=None):
         "include_file": False,
         "include_service": False,
         "exclude_license": False,
+        "use_pip": False,
         "system": False,
         "output_file": "",
         "sbom": "spdx",
@@ -144,6 +151,7 @@ def main(argv=None):
         print("Exclude Licences:", args["exclude_license"])
         print("Include Files:", args["include_file"])
         print("Include Services:", args["include_service"])
+        print("Use Pip:", args["use_pip"])
         print("Module", module_name)
         print("Requirements file", args["requirement"])
         print("System", args["system"])
@@ -154,7 +162,11 @@ def main(argv=None):
         print(f"Analysing {module_name}")
 
     sbom_scan = SBOMScanner(
-        args["debug"], args["include_file"], args["exclude_license"], include_service=args["include_service"]
+        args["debug"],
+        args["include_file"],
+        args["exclude_license"],
+        include_service=args["include_service"],
+        use_pip=args["use_pip"],
     )
 
     if len(module_name) > 0:
