@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import ast
-# import importlib.metadata
+import configparser
 import pathlib
 import platform
 import re
@@ -10,6 +10,8 @@ import string
 import subprocess
 import sys
 import unicodedata
+
+import toml
 
 if sys.version_info >= (3, 10):
     from importlib import metadata as importlib_metadata
@@ -112,14 +114,14 @@ class SBOMScanner:
         self.sbom_package.set_name(package)
         self.sbom_package.set_property("language", "Python")
         self.sbom_package.set_property("python_version", self.python_version)
-        if not offline:
-            # External metadata may lag releases
-            if self.package_metadata.get_latest_version() == version:
-                self.sbom_package.set_property(
-                    "package_release_date",
-                    self.package_metadata.get_latest_release_time(),
-                )
-        self.sbom_package.set_version(version)
+        if version is not None:
+            self.sbom_package.set_version(version)
+            if not offline:
+                # External metadata may lag releases
+                if self.package_metadata.get_latest_version() == version:
+                    self.sbom_package.set_value(
+                        "release_date", self.package_metadata.get_latest_release_time()
+                    )
         if requirements is not None:
             self.sbom_package.set_evidence(requirements)
         if parent == "-":
@@ -242,16 +244,27 @@ class SBOMScanner:
                 else:
                     self.sbom_package.set_externalreference("OTHER", category, locator)
         if self.metadata.get("Download-URL") is None:
-            self.sbom_package.set_downloadlocation(
+            if version is None:
+                self.sbom_package.set_downloadlocation(
+                    f"https://pypi.org/project/{package}/#files"
+                )
+            else:
+                self.sbom_package.set_downloadlocation(
                 f"https://pypi.org/project/{package}/{version}/#files"
             )
         else:
             self.sbom_package.set_downloadlocation(self.metadata.get("Download-URL"))
         # External references
-        self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
+        if version is not None:
+            self.sbom_package.set_purl(f"pkg:pypi/{package}@{version}")
+        else:
+            self.sbom_package.set_purl(f"pkg:pypi/{package}")
         if len(supplier) > 1:
             component_supplier = self._format_supplier(supplier, include_email=False)
-            cpe_version = version.replace(":", "\\:")
+            if version is not None:
+                cpe_version = version.replace(":", "\\:")
+            else:
+                cpe_version = ""
             self.sbom_package.set_cpe(
                 f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*"
             )
@@ -337,6 +350,19 @@ class SBOMScanner:
         else:
             return []
 
+    def _extract_package_name(self, requirement_string):
+        for i, char in enumerate(requirement_string):
+            # Ignore optional dependencies
+            if "extra" in requirement_string:
+                return ""
+            # Paqckage names only contain alphanumeric characters and -_
+            if not char.isalnum() and char not in ["-", "_"]:
+                return requirement_string[:i]
+        return requirement_string
+
+    def _extract_package_names(self, requirements_list):
+        return [self._extract_package_name(req) for req in requirements_list]
+
     def _getpackage_metadata(self, module):
         metadata = {}
         if self.use_pip:
@@ -389,25 +415,12 @@ class SBOMScanner:
             else:
                 requires = None
 
-            def extract_package_name(requirement_string):
-                for i, char in enumerate(requirement_string):
-                    # Ignore optional dependencies
-                    if "extra" in requirement_string:
-                        return ""
-                    # Paqckage names only contain alphanumeric characters and -
-                    if not char.isalnum() and char != "-":
-                        return requirement_string[:i]
-                return requirement_string
-
-            def extract_package_names(requirements_list):
-                return [extract_package_name(req) for req in requirements_list]
-
             if requires is not None:
                 # Find dependent packages
                 if self.debug:
                     print(f"Dependencies for {module} - {requires}")
 
-                package_names = extract_package_names(requires)
+                package_names = self._extract_package_names(requires)
 
                 package_dependendents = ""
                 for name in package_names:
@@ -543,6 +556,39 @@ class SBOMScanner:
                 self.analyze(self.get("Name"), self.get("Requires"))
 
     def process_requirements(self, filename):
+        if filename.endswith(".toml"):
+            self.process_pyproject(filename)
+        elif filename.endswith(".cfg"):
+            self.process_setup_cfg(filename)
+        elif filename.endswith(".py"):
+            self.process_setup_py(filename)
+        elif filename.endswith(".txt"):
+            self.process_requirements_file(filename)
+        elif self.debug:
+            print (f"Unable to process requirements file {filename}")
+
+    def _process_requirement_dependency(self, dependency, filename):
+        if len(dependency.strip()) > 0:
+            # Ignore anything after ; e.g. python_version<"3.8"
+            element = dependency.strip().split(";")[0]
+            # Check for pinned dependency
+            component = element.split("==")
+            if len(component) == 2:
+                # Package and version found
+                package = component[0]
+                version = component[1]
+                if self.debug:
+                    print(f"Processing {package} version {version}")
+            else:
+                # Not pinned version
+                package = self._extract_package_name(element.split(" ")[0])
+                version = None
+                if self.debug:
+                    print(f"Processing {package}")
+            self._create_package(package, version, requirements=filename)
+            self._create_relationship(package)
+    def process_requirements_file(self, filename):
+        # Process a requirements.txt file
         if len(filename) > 0:
             # Check file exists
             filePath = pathlib.Path(filename)
@@ -553,13 +599,70 @@ class SBOMScanner:
                 self.set_lifecycle("pre-build")
                 self.set_parent(filename)
                 for line in lines:
-                    # Extract package and version
-                    component = line.strip().split("==")
-                    if len(component) == 2:
-                        # Package and version found
-                        package = component[0]
-                        version = component[1]
+                    self._process_requirement_dependency(line, filename)
+
+    def process_pyproject(self, filename):
+        # Process pyproject.toml file
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                with open(filename) as file:
+                    pyproject_data = toml.load(file)
+                    if "project" in pyproject_data:
+                        if "dependencies" in pyproject_data["project"]:
+                            dependencies = pyproject_data["project"]["dependencies"]
+                            if self.debug:
+                                print(dependencies)
+                            self.set_lifecycle("pre-build")
+                            self.set_parent(filename)
+                            for dependency in dependencies:
+                                self._process_requirement_dependency(
+                                    dependency, filename
+                                )
+
+    def process_setup_cfg(self, filename):
+        # Process setup.cfg file
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                config = configparser.ConfigParser()
+                config.read(filename)
+                if "options" in config.sections():
+                    if "install_requires" in config["options"]:
+                        dependencies = config["options"]["install_requires"]
                         if self.debug:
-                            print(f"Processing {package} version {version}")
-                        self._create_package(package, version, requirements=filename)
-                        self._create_relationship(package)
+                            print(dependencies)
+                        self.set_lifecycle("pre-build")
+                        self.set_parent(filename)
+                        for dependency in dependencies.splitlines():
+                            self._process_requirement_dependency(dependency, filename)
+
+    def process_setup_py(self, filename):
+        # Process setup.py file
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                dependencies = []
+                with open(filename, "r") as setup_file:
+                    # Read the file into a stream and search for list if dependencies specified by install_requires
+                    stream = setup_file.read().replace("\n", "")
+                    match = re.search(r"install_requires\s*=\s*\[([^\]]+)\]", stream)
+                    if match:
+                        dependency_list = match.group(1).strip()
+                        dependencies = [
+                            dep.strip().replace('"', "").replace("'", "")
+                            for dep in dependency_list.split(",")
+                            if len(dep) > 0
+                        ]
+                if self.debug:
+                    print(dependencies)
+                self.set_lifecycle("pre-build")
+                self.set_parent(filename)
+                for dependency in dependencies:
+                    self._process_requirement_dependency(dependency, filename)

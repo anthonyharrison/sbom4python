@@ -97,8 +97,10 @@ Output:
 ## Operation
 
 The `--module` option is used to identify the Python module. The `--system` option is used to indicate that the SBOM is to include all installed
-Python modules. The `--requirement` option is used to create an SBOM from a requirements.txt file. In this case, no transitive dependencies will be
-identified if this option is specified.
+Python modules.
+
+The `--requirement` option is used to create an SBOM from a requirements.txt, pyproject.toml, setup.cfg or setup.py file. Whilst the filenames may be different e.g. requirements_test.txt can be specified, it is the file extension which determines the identification of the dependencies. Using this option will result in no transitive dependencies being
+identified.
 
 One of `--module`,  `--requirement` or `--system` must be specified. If multiple options are specified, the order of priority is `--module`, `--system` and `--requirement`.
 
@@ -132,7 +134,7 @@ This tool is meant to support software development and security audit functions.
 which is provided to the tool. Unfortunately, the tool is unable to determine the validity or completeness of such a SBOM file; users of the tool
 are therefore reminded that they should assert the quality of any data which is provided to the tool.
 
-The `--requirement` option will only process modules in the file which have pinned versions. Any modules which not specify a version will be ignored.
+The `--requirement` option will only report the package version for pinned dependencies.
 
 When processing and validating licenses, the application will use a set of synonyms to attempt to map some license identifiers to the correct [SPDX License Identifiers](https://spdx.org/licenses/). However, the
 user of the tool is reminded that they should assert the quality of any data which is provided by the tool particularly where the license identifier has been modified.

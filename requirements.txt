@@ -3,3 +3,4 @@ sbom4files >= 0.4.4
 sbom2dot >= 0.3.0
 lib4package
 importlib_metadata>=3.6; python_version < "3.10"
+toml; python_version < "3.11"
