@@ -118,10 +118,9 @@ class SBOMScanner:
             self.sbom_package.set_version(version)
             if not offline:
                 # External metadata may lag releases
-                if self.package_metadata.get_latest_version() == version:
-                    self.sbom_package.set_value(
-                        "release_date", self.package_metadata.get_latest_release_time()
-                    )
+                self.sbom_package.set_value(
+                    "release_date", self.package_metadata.get_latest_release_time()
+                )
         if requirements is not None:
             self.sbom_package.set_evidence(requirements)
         if parent == "-":
