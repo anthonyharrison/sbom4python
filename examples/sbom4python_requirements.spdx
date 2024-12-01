@@ -1,0 +1,229 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "comment": "This document has been automatically generated.",
+    "creators": [
+      "Tool: sbom4python-0.12.0"
+    ],
+    "created": "2024-12-01T22:15:07Z",
+    "licenseListVersion": "3.25.0"
+  },
+  "name": "Python-requirements.txt",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Python-requirements.txt-0c542308-a8ce-4d3c-90e3-dd621408e69c",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-1-lib4sbom",
+      "name": "lib4sbom",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: anthonyharrison",
+      "downloadLocation": "https://pypi.org/project/lib4sbom/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/lib4sbom",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "4acc6e53fef71b007dc63bac2d407a0d2bbf3bd4"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Software Bill of Material (SBOM) generator and consumer library",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/lib4sbom"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthonyharrison:lib4sbom::*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-2-sbom4files",
+      "name": "sbom4files",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: anthonyharrison",
+      "downloadLocation": "https://pypi.org/project/sbom4files/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/sbom4files",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "SBOM generator for files in a directory",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/sbom4files"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthonyharrison:sbom4files::*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-3-sbom2dot",
+      "name": "sbom2dot",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: anthonyharrison",
+      "downloadLocation": "https://pypi.org/project/sbom2dot/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/sbom2dot",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b0166f013a9f8480be0a2e9565cefb20e822100a"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Create a dependency graph of the components within a SBOM",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/sbom2dot"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthonyharrison:sbom2dot::*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-4-lib4package",
+      "name": "lib4package",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: anthonyharrison",
+      "downloadLocation": "https://pypi.org/project/lib4package/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/lib4package",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "f8803087245c5d2283cec0a8c5b63f186910ea75"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Utility for handling package metadata to include in Software Bill of Materials (SBOMs)",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/lib4package"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthonyharrison:lib4package::*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-5-importlib-metadata",
+      "name": "importlib_metadata",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: Python",
+      "downloadLocation": "https://pypi.org/project/importlib_metadata/#files",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "b34810b1e0665580a91ea19b6317a1890ecd42c1"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "licenseComments": "importlib_metadata declares Apache Software License which is not currently a valid SPDX License identifier or expression.",
+      "copyrightText": "NOASSERTION",
+      "summary": "Read metadata from Python packages",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/importlib_metadata"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:python:importlib_metadata::*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-6-toml",
+      "name": "toml",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: Will Pearson",
+      "downloadLocation": "https://pypi.org/project/toml/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/uiri/toml",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "3f637dba5f68db63d4b30967fedda51c82459471"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "summary": "Python Library for Tom's Obvious, Minimal Language",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/toml"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:will_pearson:toml::*:*:*:*:*:*:*"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-1-lib4sbom",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-2-sbom4files",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-3-sbom2dot",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-4-lib4package",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-5-importlib-metadata",
+      "relationshipType": "DESCRIBES"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-6-toml",
+      "relationshipType": "DESCRIBES"
+    }
+  ]
+}

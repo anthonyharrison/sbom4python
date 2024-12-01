@@ -1,0 +1,33 @@
+SPDXVersion: SPDX-2.3
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: Python-pip
+DocumentNamespace: http://spdx.org/spdxdocs/Python-pip-e95b8c00-863d-4be7-ae23-9ce6d78d96ba
+LicenseListVersion: 3.25.0
+Creator: Tool: sbom4python-0.12.0
+Created: 2024-12-01T22:12:06Z
+CreatorComment: <text>This document has been automatically generated.</text>
+##### 
+
+PackageName: pip
+SPDXID: SPDXRef-1-pip
+PackageVersion: 22.3
+PrimaryPackagePurpose: APPLICATION
+PackageSupplier: Organization: The pip developers (distutils-sig@python.org)
+PackageDownloadLocation: https://pypi.org/project/pip/22.3/#files
+FilesAnalyzed: false
+PackageHomePage: https://pip.pypa.io/
+PackageChecksum: SHA256: 1daab4b8d3b97d1d763caeb01a4640a2250a0ea899e257b1e44b9eded91e15ab
+PackageLicenseDeclared: MIT
+PackageLicenseConcluded: MIT
+PackageCopyrightText: NOASSERTION
+PackageSummary: <text>The PyPA recommended tool for installing Python packages.</text>
+BuiltDate: 2022-10-15T11:41:14.000Z
+ExternalRef: OTHER documentation https://pip.pypa.io
+ExternalRef: OTHER vcs https://github.com/pypa/pip
+ExternalRef: OTHER log https://pip.pypa.io/en/stable/news/
+ExternalRef: PACKAGE_MANAGER purl pkg:pypi/pip@22.3
+ExternalRef: SECURITY cpe23Type cpe:2.3:a:the_pip_developers:pip:22.3:*:*:*:*:*:*:*
+##### 
+
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-1-pip

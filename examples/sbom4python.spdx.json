@@ -1,0 +1,667 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "comment": "This document has been automatically generated.",
+    "creators": [
+      "Tool: sbom4python-0.12.0"
+    ],
+    "created": "2024-12-01T22:18:01Z",
+    "licenseListVersion": "3.25.0"
+  },
+  "name": "Python-sbom4python",
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "http://spdx.org/spdxdocs/Python-sbom4python-e2b25f6a-c608-4272-894c-236f0bede721",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-1-sbom4python",
+      "name": "sbom4python",
+      "versionInfo": "0.12.0",
+      "primaryPackagePurpose": "APPLICATION",
+      "supplier": "Person: Anthony Harrison (anthony.p.harrison@gmail.com)",
+      "downloadLocation": "https://pypi.org/project/sbom4python/0.12.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/sbom4python",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "SBOM generator for Python modules",
+      "builtdate": null,
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/sbom4python@0.12.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthony_harrison:sbom4python:0.12.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-2-lib4package",
+      "name": "lib4package",
+      "versionInfo": "0.3.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Anthony Harrison (anthony.p.harrison@gmail.com)",
+      "downloadLocation": "https://pypi.org/project/lib4package/0.3.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/lib4package",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Utility for handling package metadata to include in Software Bill of Materials (SBOMs)",
+      "builtdate": null,
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/lib4package@0.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthony_harrison:lib4package:0.3.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-3-requests",
+      "name": "requests",
+      "versionInfo": "2.31.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Kenneth Reitz (me@kennethreitz.org)",
+      "downloadLocation": "https://pypi.org/project/requests/2.31.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://requests.readthedocs.io",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "licenseComments": "requests declares Apache 2.0 which is not currently a valid SPDX License identifier or expression.",
+      "copyrightText": "NOASSERTION",
+      "summary": "Python HTTP for Humans.",
+      "builtdate": "2023-05-22T15:12:42.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "documentation",
+          "referenceLocator": "https://requests.readthedocs.io"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "vcs",
+          "referenceLocator": "https://github.com/psf/requests"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/requests@2.31.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:kenneth_reitz:requests:2.31.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-4-charset-normalizer",
+      "name": "charset-normalizer",
+      "versionInfo": "3.3.2",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Ahmed TAHRI (ahmed.tahri@cloudnursery.dev)",
+      "downloadLocation": "https://pypi.org/project/charset-normalizer/3.3.2/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/Ousret/charset_normalizer",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "25baf083bf6f6b341f4121c2f3c548875ee6f5339300e08be3f2b2ba1721cdd3"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "summary": "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.",
+      "builtdate": "2023-11-01T04:02:29.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "issue-tracker",
+          "referenceLocator": "https://github.com/Ousret/charset_normalizer/issues"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "documentation",
+          "referenceLocator": "https://charset-normalizer.readthedocs.io/en/latest"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/charset-normalizer@3.3.2"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:ahmed_tahri:charset-normalizer:3.3.2:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-5-idna",
+      "name": "idna",
+      "versionInfo": "3.4",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Kim Davies (kim@cynosure.com.au)",
+      "downloadLocation": "https://pypi.org/project/idna/3.4/#files",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "summary": "Internationalized Domain Names in Applications (IDNA)",
+      "builtdate": "2022-09-14T00:24:23.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "log",
+          "referenceLocator": "https://github.com/kjd/idna/blob/master/HISTORY.rst"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "issue-tracker",
+          "referenceLocator": "https://github.com/kjd/idna/issues"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "vcs",
+          "referenceLocator": "https://github.com/kjd/idna"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/idna@3.4"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:kim_davies:idna:3.4:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-6-urllib3",
+      "name": "urllib3",
+      "versionInfo": "2.1.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Andrey Petrov (andrey.petrov@shazow.net)",
+      "downloadLocation": "https://pypi.org/project/urllib3/2.1.0/#files",
+      "filesAnalyzed": false,
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "summary": "HTTP library with thread-safe connection pooling, file post, and more.",
+      "builtdate": "2023-11-13T12:29:42.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "log",
+          "referenceLocator": "https://github.com/urllib3/urllib3/blob/main/CHANGES.rst"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "documentation",
+          "referenceLocator": "https://urllib3.readthedocs.io"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "vcs",
+          "referenceLocator": "https://github.com/urllib3/urllib3"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "issue-tracker",
+          "referenceLocator": "https://github.com/urllib3/urllib3/issues"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/urllib3@2.1.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:andrey_petrov:urllib3:2.1.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-7-certifi",
+      "name": "certifi",
+      "versionInfo": "2023.11.17",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Kenneth Reitz (me@kennethreitz.com)",
+      "downloadLocation": "https://pypi.org/project/certifi/2023.11.17/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/certifi/python-certifi",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474"
+        }
+      ],
+      "licenseConcluded": "MPL-2.0",
+      "licenseDeclared": "MPL-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Python package for providing Mozilla's CA Bundle.",
+      "builtdate": "2023-11-18T02:54:00.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "vcs",
+          "referenceLocator": "https://github.com/certifi/python-certifi"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/certifi@2023.11.17"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:kenneth_reitz:certifi:2023.11.17:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-8-lib4sbom",
+      "name": "lib4sbom",
+      "versionInfo": "0.8.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Anthony Harrison (anthony.p.harrison@gmail.com)",
+      "downloadLocation": "https://pypi.org/project/lib4sbom/0.8.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/lib4sbom",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Software Bill of Material (SBOM) generator and consumer library",
+      "builtdate": "2023-11-18T02:54:00.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/lib4sbom@0.8.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthony_harrison:lib4sbom:0.8.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-9-pyyaml",
+      "name": "pyyaml",
+      "versionInfo": "6.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Kirill Simonov (xi@resolvent.net)",
+      "downloadLocation": "https://pypi.org/project/PyYAML/",
+      "filesAnalyzed": false,
+      "homepage": "https://pyyaml.org/",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "summary": "YAML parser and emitter for Python",
+      "builtdate": "2021-10-13T19:39:42.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "issue-tracker",
+          "referenceLocator": "https://github.com/yaml/pyyaml/issues"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "build-system",
+          "referenceLocator": "https://github.com/yaml/pyyaml/actions"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "documentation",
+          "referenceLocator": "https://pyyaml.org/wiki/PyYAMLDocumentation"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "mailing-list",
+          "referenceLocator": "http://lists.sourceforge.net/lists/listinfo/yaml-core"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceType": "vcs",
+          "referenceLocator": "https://github.com/yaml/pyyaml"
+        },
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/pyyaml@6.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:kirill_simonov:pyyaml:6.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-10-semantic-version",
+      "name": "semantic-version",
+      "versionInfo": "2.10.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Raphael Barrois (raphael.barrois+semver@polytechnique.org)",
+      "downloadLocation": "https://pypi.org/project/semantic-version/2.10.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/rbarrois/python-semanticversion",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177"
+        }
+      ],
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "NOASSERTION",
+      "licenseComments": "semantic-version declares BSD which is not currently a valid SPDX License identifier or expression.",
+      "copyrightText": "NOASSERTION",
+      "summary": "A library implementing the 'SemVer' scheme.",
+      "builtdate": "2022-05-26T13:35:21.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/semantic-version@2.10.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:raphael_barrois:semantic-version:2.10.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-11-defusedxml",
+      "name": "defusedxml",
+      "versionInfo": "0.7.1",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Christian Heimes (christian@python.org)",
+      "downloadLocation": "https://pypi.python.org/pypi/defusedxml",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/tiran/defusedxml",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"
+        }
+      ],
+      "licenseConcluded": "PSF-2.0",
+      "licenseDeclared": "NOASSERTION",
+      "licenseComments": "defusedxml declares PSFL which is not currently a valid SPDX License identifier or expression.",
+      "copyrightText": "NOASSERTION",
+      "summary": "XML bomb protection for Python stdlib modules",
+      "builtdate": "2021-03-08T10:59:24.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/defusedxml@0.7.1"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:christian_heimes:defusedxml:0.7.1:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-12-sbom2dot",
+      "name": "sbom2dot",
+      "versionInfo": "0.3.0",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Anthony Harrison (anthony.p.harrison@gmail.com)",
+      "downloadLocation": "https://pypi.org/project/sbom2dot/0.3.0/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/sbom2dot",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "58e368fb68abc027d0f823e64b41daadad2440243c6541a5ffa9e87c1f611870"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "Create a dependency graph of the components within a SBOM",
+      "builtdate": "2023-07-24T17:56:49.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/sbom2dot@0.3.0"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthony_harrison:sbom2dot:0.3.0:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-13-sbom4files",
+      "name": "sbom4files",
+      "versionInfo": "0.4.4",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Anthony Harrison (anthony.p.harrison@gmail.com)",
+      "downloadLocation": "https://pypi.org/project/sbom4files/0.4.4/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/anthonyharrison/sbom4files",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "f6cefbacceff562d2d7e84b572fe7a487ef15e9c5b6db72fdbf1dcb3bc8c0c56"
+        }
+      ],
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "NOASSERTION",
+      "summary": "SBOM generator for files in a directory",
+      "builtdate": "2024-09-19T13:42:40.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/sbom4files@0.4.4"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:anthony_harrison:sbom4files:0.4.4:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-14-python-magic",
+      "name": "python-magic",
+      "versionInfo": "0.4.27",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: Adam Hupp (adam@hupp.org)",
+      "downloadLocation": "https://pypi.org/project/python-magic/0.4.27/#files",
+      "filesAnalyzed": false,
+      "homepage": "http://github.com/ahupp/python-magic",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "summary": "File type identification using libmagic",
+      "builtdate": "2022-06-07T20:16:57.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/python-magic@0.4.27"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:adam_hupp:python-magic:0.4.27:*:*:*:*:*:*:*"
+        }
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-15-toml",
+      "name": "toml",
+      "versionInfo": "0.10.2",
+      "primaryPackagePurpose": "LIBRARY",
+      "supplier": "Person: William Pearson (uiri@xqz.ca)",
+      "downloadLocation": "https://pypi.org/project/toml/0.10.2/#files",
+      "filesAnalyzed": false,
+      "homepage": "https://github.com/uiri/toml",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"
+        }
+      ],
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "copyrightText": "NOASSERTION",
+      "summary": "Python Library for Tom's Obvious, Minimal Language",
+      "builtdate": "2020-11-01T01:40:20.000Z",
+      "externalRefs": [
+        {
+          "referenceCategory": "PACKAGE_MANAGER",
+          "referenceType": "purl",
+          "referenceLocator": "pkg:pypi/toml@0.10.2"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceType": "cpe23Type",
+          "referenceLocator": "cpe:2.3:a:william_pearson:toml:0.10.2:*:*:*:*:*:*:*"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-1-sbom4python",
+      "relatedSpdxElement": "SPDXRef-12-sbom2dot",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-1-sbom4python",
+      "relatedSpdxElement": "SPDXRef-13-sbom4files",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-1-sbom4python",
+      "relatedSpdxElement": "SPDXRef-15-toml",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-1-sbom4python",
+      "relatedSpdxElement": "SPDXRef-2-lib4package",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-1-sbom4python",
+      "relatedSpdxElement": "SPDXRef-8-lib4sbom",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-12-sbom2dot",
+      "relatedSpdxElement": "SPDXRef-8-lib4sbom",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-13-sbom4files",
+      "relatedSpdxElement": "SPDXRef-14-python-magic",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-13-sbom4files",
+      "relatedSpdxElement": "SPDXRef-8-lib4sbom",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-2-lib4package",
+      "relatedSpdxElement": "SPDXRef-3-requests",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-3-requests",
+      "relatedSpdxElement": "SPDXRef-4-charset-normalizer",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-3-requests",
+      "relatedSpdxElement": "SPDXRef-5-idna",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-3-requests",
+      "relatedSpdxElement": "SPDXRef-6-urllib3",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-3-requests",
+      "relatedSpdxElement": "SPDXRef-7-certifi",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-8-lib4sbom",
+      "relatedSpdxElement": "SPDXRef-10-semantic-version",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-8-lib4sbom",
+      "relatedSpdxElement": "SPDXRef-11-defusedxml",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-8-lib4sbom",
+      "relatedSpdxElement": "SPDXRef-9-pyyaml",
+      "relationshipType": "DEPENDS_ON"
+    },
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relatedSpdxElement": "SPDXRef-1-sbom4python",
+      "relationshipType": "DESCRIBES"
+    }
+  ]
+}

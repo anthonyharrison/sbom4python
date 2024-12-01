@@ -1,0 +1,363 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:d7ed4efc-2307-4372-bc66-a37ccdc82cfd",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-12-01T22:15:44Z",
+    "lifecycles": [
+      {
+        "phase": "pre-build"
+      }
+    ],
+    "tools": {
+      "components": [
+        {
+          "name": "sbom4python",
+          "version": "0.12.0",
+          "type": "application"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "CDXRef-DOCUMENT",
+      "name": "Python-requirements.txt"
+    }
+  },
+  "components": [
+    {
+      "type": "application",
+      "bom-ref": "1-lib4sbom",
+      "name": "lib4sbom",
+      "supplier": {
+        "name": "anthonyharrison"
+      },
+      "description": "Software Bill of Material (SBOM) generator and consumer library",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4acc6e53fef71b007dc63bac2d407a0d2bbf3bd4"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/lib4sbom",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/lib4sbom/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/lib4sbom",
+      "cpe": "cpe:2.3:a:anthonyharrison:lib4sbom::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "2-sbom4files",
+      "name": "sbom4files",
+      "supplier": {
+        "name": "anthonyharrison"
+      },
+      "description": "SBOM generator for files in a directory",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/sbom4files",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/sbom4files/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/sbom4files",
+      "cpe": "cpe:2.3:a:anthonyharrison:sbom4files::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "3-sbom2dot",
+      "name": "sbom2dot",
+      "supplier": {
+        "name": "anthonyharrison"
+      },
+      "description": "Create a dependency graph of the components within a SBOM",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "b0166f013a9f8480be0a2e9565cefb20e822100a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/sbom2dot",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/sbom2dot/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/sbom2dot",
+      "cpe": "cpe:2.3:a:anthonyharrison:sbom2dot::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "4-lib4package",
+      "name": "lib4package",
+      "supplier": {
+        "name": "anthonyharrison"
+      },
+      "description": "Utility for handling package metadata to include in Software Bill of Materials (SBOMs)",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "f8803087245c5d2283cec0a8c5b63f186910ea75"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/lib4package",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/lib4package/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/lib4package",
+      "cpe": "cpe:2.3:a:anthonyharrison:lib4package::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "5-importlib_metadata",
+      "name": "importlib_metadata",
+      "supplier": {
+        "name": "Python"
+      },
+      "description": "Read metadata from Python packages",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "b34810b1e0665580a91ea19b6317a1890ecd42c1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://pypi.org/project/importlib_metadata/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/importlib_metadata",
+      "cpe": "cpe:2.3:a:python:importlib_metadata::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "6-toml",
+      "name": "toml",
+      "supplier": {
+        "name": "Will Pearson"
+      },
+      "description": "Python Library for Tom's Obvious, Minimal Language",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3f637dba5f68db63d4b30967fedda51c82459471"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/uiri/toml",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/toml/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "evidence": {
+        "occurrences": [
+          {
+            "location": "requirements.txt"
+          }
+        ]
+      },
+      "purl": "pkg:pypi/toml",
+      "cpe": "cpe:2.3:a:will_pearson:toml::*:*:*:*:*:*:*",
+      "properties": [
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "CDXRef-DOCUMENT",
+      "dependsOn": [
+        "1-lib4sbom",
+        "2-sbom4files",
+        "3-sbom2dot",
+        "4-lib4package",
+        "5-importlib_metadata",
+        "6-toml"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:c62c4124-f89f-44eb-9d50-28e904f52864",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-12-01T22:11:45Z",
+    "lifecycles": [
+      {
+        "phase": "build"
+      }
+    ],
+    "tools": {
+      "components": [
+        {
+          "name": "sbom4python",
+          "version": "0.12.0",
+          "type": "application"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "CDXRef-DOCUMENT",
+      "name": "Python-pip"
+    }
+  },
+  "components": [
+    {
+      "type": "application",
+      "bom-ref": "1-pip",
+      "name": "pip",
+      "version": "22.3",
+      "supplier": {
+        "name": "The pip developers",
+        "contact": [
+          {
+            "email": "distutils-sig@python.org"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:the_pip_developers:pip:22.3:*:*:*:*:*:*:*",
+      "description": "The PyPA recommended tool for installing Python packages.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1daab4b8d3b97d1d763caeb01a4640a2250a0ea899e257b1e44b9eded91e15ab"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://pip.pypa.io/",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/pip/22.3/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://pip.pypa.io",
+          "type": "documentation"
+        },
+        {
+          "url": "https://github.com/pypa/pip",
+          "type": "vcs"
+        },
+        {
+          "url": "https://pip.pypa.io/en/stable/news/",
+          "type": "log"
+        }
+      ],
+      "purl": "pkg:pypi/pip@22.3",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2022-10-15T11:41:14.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "CDXRef-DOCUMENT",
+      "dependsOn": [
+        "1-pip"
+      ]
+    }
+  ]
+}

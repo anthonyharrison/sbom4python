@@ -1,0 +1,977 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:3f1e6863-0159-4275-9edf-5ecf030f33c9",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2024-12-01T22:18:33Z",
+    "lifecycles": [
+      {
+        "phase": "build"
+      }
+    ],
+    "tools": {
+      "components": [
+        {
+          "name": "sbom4python",
+          "version": "0.12.0",
+          "type": "application"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "CDXRef-DOCUMENT",
+      "name": "Python-sbom4python"
+    }
+  },
+  "components": [
+    {
+      "type": "application",
+      "bom-ref": "1-sbom4python",
+      "name": "sbom4python",
+      "version": "0.12.0",
+      "supplier": {
+        "name": "Anthony Harrison",
+        "contact": [
+          {
+            "email": "anthony.p.harrison@gmail.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:anthony_harrison:sbom4python:0.12.0:*:*:*:*:*:*:*",
+      "description": "SBOM generator for Python modules",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/sbom4python",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/sbom4python/0.12.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/sbom4python@0.12.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": null
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "2-lib4package",
+      "name": "lib4package",
+      "version": "0.3.0",
+      "supplier": {
+        "name": "Anthony Harrison",
+        "contact": [
+          {
+            "email": "anthony.p.harrison@gmail.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:anthony_harrison:lib4package:0.3.0:*:*:*:*:*:*:*",
+      "description": "Utility for handling package metadata to include in Software Bill of Materials (SBOMs)",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/lib4package",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/lib4package/0.3.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/lib4package@0.3.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": null
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "3-requests",
+      "name": "requests",
+      "version": "2.31.0",
+      "supplier": {
+        "name": "Kenneth Reitz",
+        "contact": [
+          {
+            "email": "me@kennethreitz.org"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:kenneth_reitz:requests:2.31.0:*:*:*:*:*:*:*",
+      "description": "Python HTTP for Humans.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://requests.readthedocs.io",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/requests/2.31.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://requests.readthedocs.io",
+          "type": "documentation"
+        },
+        {
+          "url": "https://github.com/psf/requests",
+          "type": "vcs"
+        }
+      ],
+      "purl": "pkg:pypi/requests@2.31.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-05-22T15:12:42.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "4-charset-normalizer",
+      "name": "charset-normalizer",
+      "version": "3.3.2",
+      "supplier": {
+        "name": "Ahmed TAHRI",
+        "contact": [
+          {
+            "email": "ahmed.tahri@cloudnursery.dev"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:ahmed_tahri:charset-normalizer:3.3.2:*:*:*:*:*:*:*",
+      "description": "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "25baf083bf6f6b341f4121c2f3c548875ee6f5339300e08be3f2b2ba1721cdd3"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/Ousret/charset_normalizer",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/charset-normalizer/3.3.2/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://github.com/Ousret/charset_normalizer/issues",
+          "type": "issue-tracker"
+        },
+        {
+          "url": "https://charset-normalizer.readthedocs.io/en/latest",
+          "type": "documentation"
+        }
+      ],
+      "purl": "pkg:pypi/charset-normalizer@3.3.2",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-11-01T04:02:29.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "5-idna",
+      "name": "idna",
+      "version": "3.4",
+      "supplier": {
+        "name": "Kim Davies",
+        "contact": [
+          {
+            "email": "kim@cynosure.com.au"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:kim_davies:idna:3.4:*:*:*:*:*:*:*",
+      "description": "Internationalized Domain Names in Applications (IDNA)",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://pypi.org/project/idna/3.4/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://github.com/kjd/idna/blob/master/HISTORY.rst",
+          "type": "log"
+        },
+        {
+          "url": "https://github.com/kjd/idna/issues",
+          "type": "issue-tracker"
+        },
+        {
+          "url": "https://github.com/kjd/idna",
+          "type": "vcs"
+        }
+      ],
+      "purl": "pkg:pypi/idna@3.4",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2022-09-14T00:24:23.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "6-urllib3",
+      "name": "urllib3",
+      "version": "2.1.0",
+      "supplier": {
+        "name": "Andrey Petrov",
+        "contact": [
+          {
+            "email": "andrey.petrov@shazow.net"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:andrey_petrov:urllib3:2.1.0:*:*:*:*:*:*:*",
+      "description": "HTTP library with thread-safe connection pooling, file post, and more.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3"
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://pypi.org/project/urllib3/2.1.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/blob/main/CHANGES.rst",
+          "type": "log"
+        },
+        {
+          "url": "https://urllib3.readthedocs.io",
+          "type": "documentation"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3",
+          "type": "vcs"
+        },
+        {
+          "url": "https://github.com/urllib3/urllib3/issues",
+          "type": "issue-tracker"
+        }
+      ],
+      "purl": "pkg:pypi/urllib3@2.1.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-11-13T12:29:42.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "7-certifi",
+      "name": "certifi",
+      "version": "2023.11.17",
+      "supplier": {
+        "name": "Kenneth Reitz",
+        "contact": [
+          {
+            "email": "me@kennethreitz.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:kenneth_reitz:certifi:2023.11.17:*:*:*:*:*:*:*",
+      "description": "Python package for providing Mozilla's CA Bundle.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MPL-2.0",
+            "url": "https://www.mozilla.org/MPL/2.0/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/certifi/python-certifi",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/certifi/2023.11.17/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://github.com/certifi/python-certifi",
+          "type": "vcs"
+        }
+      ],
+      "purl": "pkg:pypi/certifi@2023.11.17",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-11-18T02:54:00.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "8-lib4sbom",
+      "name": "lib4sbom",
+      "version": "0.8.0",
+      "supplier": {
+        "name": "Anthony Harrison",
+        "contact": [
+          {
+            "email": "anthony.p.harrison@gmail.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:anthony_harrison:lib4sbom:0.8.0:*:*:*:*:*:*:*",
+      "description": "Software Bill of Material (SBOM) generator and consumer library",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/lib4sbom",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/lib4sbom/0.8.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/lib4sbom@0.8.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-11-18T02:54:00.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "9-pyyaml",
+      "name": "pyyaml",
+      "version": "6.0",
+      "supplier": {
+        "name": "Kirill Simonov",
+        "contact": [
+          {
+            "email": "xi@resolvent.net"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:kirill_simonov:pyyaml:6.0:*:*:*:*:*:*:*",
+      "description": "YAML parser and emitter for Python",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://pyyaml.org/",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/PyYAML/",
+          "type": "distribution",
+          "comment": "Download location for component"
+        },
+        {
+          "url": "https://github.com/yaml/pyyaml/issues",
+          "type": "issue-tracker"
+        },
+        {
+          "url": "https://github.com/yaml/pyyaml/actions",
+          "type": "build-system"
+        },
+        {
+          "url": "https://pyyaml.org/wiki/PyYAMLDocumentation",
+          "type": "documentation"
+        },
+        {
+          "url": "http://lists.sourceforge.net/lists/listinfo/yaml-core",
+          "type": "mailing-list"
+        },
+        {
+          "url": "https://github.com/yaml/pyyaml",
+          "type": "vcs"
+        }
+      ],
+      "purl": "pkg:pypi/pyyaml@6.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2021-10-13T19:39:42.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "10-semantic-version",
+      "name": "semantic-version",
+      "version": "2.10.0",
+      "supplier": {
+        "name": "Raphael Barrois",
+        "contact": [
+          {
+            "email": "raphael.barrois+semver@polytechnique.org"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:raphael_barrois:semantic-version:2.10.0:*:*:*:*:*:*:*",
+      "description": "A library implementing the 'SemVer' scheme.",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause",
+            "url": "https://opensource.org/licenses/BSD-3-Clause",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/rbarrois/python-semanticversion",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/semantic-version/2.10.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/semantic-version@2.10.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2022-05-26T13:35:21.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "11-defusedxml",
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "supplier": {
+        "name": "Christian Heimes",
+        "contact": [
+          {
+            "email": "christian@python.org"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:christian_heimes:defusedxml:0.7.1:*:*:*:*:*:*:*",
+      "description": "XML bomb protection for Python stdlib modules",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "PSF-2.0",
+            "url": "https://opensource.org/licenses/Python-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/tiran/defusedxml",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.python.org/pypi/defusedxml",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/defusedxml@0.7.1",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2021-03-08T10:59:24.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "12-sbom2dot",
+      "name": "sbom2dot",
+      "version": "0.3.0",
+      "supplier": {
+        "name": "Anthony Harrison",
+        "contact": [
+          {
+            "email": "anthony.p.harrison@gmail.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:anthony_harrison:sbom2dot:0.3.0:*:*:*:*:*:*:*",
+      "description": "Create a dependency graph of the components within a SBOM",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "58e368fb68abc027d0f823e64b41daadad2440243c6541a5ffa9e87c1f611870"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/sbom2dot",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/sbom2dot/0.3.0/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/sbom2dot@0.3.0",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2023-07-24T17:56:49.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "13-sbom4files",
+      "name": "sbom4files",
+      "version": "0.4.4",
+      "supplier": {
+        "name": "Anthony Harrison",
+        "contact": [
+          {
+            "email": "anthony.p.harrison@gmail.com"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:anthony_harrison:sbom4files:0.4.4:*:*:*:*:*:*:*",
+      "description": "SBOM generator for files in a directory",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f6cefbacceff562d2d7e84b572fe7a487ef15e9c5b6db72fdbf1dcb3bc8c0c56"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/anthonyharrison/sbom4files",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/sbom4files/0.4.4/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/sbom4files@0.4.4",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2024-09-19T13:42:40.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "14-python-magic",
+      "name": "python-magic",
+      "version": "0.4.27",
+      "supplier": {
+        "name": "Adam Hupp",
+        "contact": [
+          {
+            "email": "adam@hupp.org"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:adam_hupp:python-magic:0.4.27:*:*:*:*:*:*:*",
+      "description": "File type identification using libmagic",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "http://github.com/ahupp/python-magic",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/python-magic/0.4.27/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/python-magic@0.4.27",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2022-06-07T20:16:57.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "15-toml",
+      "name": "toml",
+      "version": "0.10.2",
+      "supplier": {
+        "name": "William Pearson",
+        "contact": [
+          {
+            "email": "uiri@xqz.ca"
+          }
+        ]
+      },
+      "cpe": "cpe:2.3:a:william_pearson:toml:0.10.2:*:*:*:*:*:*:*",
+      "description": "Python Library for Tom's Obvious, Minimal Language",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT",
+            "url": "https://opensource.org/license/mit/",
+            "acknowledgement": "concluded"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "url": "https://github.com/uiri/toml",
+          "type": "website",
+          "comment": "Home page for project"
+        },
+        {
+          "url": "https://pypi.org/project/toml/0.10.2/#files",
+          "type": "distribution",
+          "comment": "Download location for component"
+        }
+      ],
+      "purl": "pkg:pypi/toml@0.10.2",
+      "properties": [
+        {
+          "name": "release_date",
+          "value": "2020-11-01T01:40:20.000Z"
+        },
+        {
+          "name": "language",
+          "value": "Python"
+        },
+        {
+          "name": "python_version",
+          "value": "3.10.8"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "CDXRef-DOCUMENT",
+      "dependsOn": [
+        "1-sbom4python"
+      ]
+    },
+    {
+      "ref": "1-sbom4python",
+      "dependsOn": [
+        "2-lib4package",
+        "8-lib4sbom",
+        "12-sbom2dot",
+        "13-sbom4files",
+        "15-toml"
+      ]
+    },
+    {
+      "ref": "2-lib4package",
+      "dependsOn": [
+        "3-requests"
+      ]
+    },
+    {
+      "ref": "3-requests",
+      "dependsOn": [
+        "4-charset-normalizer",
+        "5-idna",
+        "6-urllib3",
+        "7-certifi"
+      ]
+    },
+    {
+      "ref": "8-lib4sbom",
+      "dependsOn": [
+        "9-pyyaml",
+        "10-semantic-version",
+        "11-defusedxml"
+      ]
+    },
+    {
+      "ref": "12-sbom2dot",
+      "dependsOn": [
+        "8-lib4sbom"
+      ]
+    },
+    {
+      "ref": "13-sbom4files",
+      "dependsOn": [
+        "8-lib4sbom",
+        "14-python-magic"
+      ]
+    }
+  ]
+}
