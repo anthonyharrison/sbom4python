@@ -106,7 +106,7 @@ class SBOMScanner:
         self.sbom_package.initialise()
         offline = False
         try:
-            self.package_metadata.get_package(package)
+            self.package_metadata.get_package(package, version)
         except Exception as ex:
             offline = True
             if self.debug:
@@ -268,9 +268,9 @@ class SBOMScanner:
             self.sbom_package.set_cpe(
                 f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*"
             )
-        checksum = self.package_metadata.get_checksum(version=version)
+        checksum, checksum_algorithm = self.package_metadata.get_checksum(version=version)
         if checksum is not None:
-            self.sbom_package.set_checksum("SHA1", checksum)
+            self.sbom_package.set_checksum(checksum_algorithm, checksum)
         # Copyright
         self.sbom_package.set_copyrighttext("NOASSERTION")
         # Store package data
@@ -451,8 +451,6 @@ class SBOMScanner:
                 # Prevent metadata being reprocessed
                 self.metadata = {}
             else:
-                if self.debug:
-                    print(f"Metadata for {module}\n{self.metadata}")
                 self._create_package(package, version, parent)
             self._create_relationship(package, parent)
             if self.include_file:
