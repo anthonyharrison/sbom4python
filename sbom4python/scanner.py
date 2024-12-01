@@ -250,8 +250,8 @@ class SBOMScanner:
                 )
             else:
                 self.sbom_package.set_downloadlocation(
-                f"https://pypi.org/project/{package}/{version}/#files"
-            )
+                    f"https://pypi.org/project/{package}/{version}/#files"
+                )
         else:
             self.sbom_package.set_downloadlocation(self.metadata.get("Download-URL"))
         # External references
@@ -268,7 +268,9 @@ class SBOMScanner:
             self.sbom_package.set_cpe(
                 f"cpe:2.3:a:{component_supplier.replace(' ', '_').lower()}:{package}:{cpe_version}:*:*:*:*:*:*:*"
             )
-        checksum, checksum_algorithm = self.package_metadata.get_checksum(version=version)
+        checksum, checksum_algorithm = self.package_metadata.get_checksum(
+            version=version
+        )
         if checksum is not None:
             self.sbom_package.set_checksum(checksum_algorithm, checksum)
         # Copyright
@@ -563,7 +565,7 @@ class SBOMScanner:
         elif filename.endswith(".txt"):
             self.process_requirements_file(filename)
         elif self.debug:
-            print (f"Unable to process requirements file {filename}")
+            print(f"Unable to process requirements file {filename}")
 
     def _process_requirement_dependency(self, dependency, filename):
         if len(dependency.strip()) > 0:
@@ -585,6 +587,7 @@ class SBOMScanner:
                     print(f"Processing {package}")
             self._create_package(package, version, requirements=filename)
             self._create_relationship(package)
+
     def process_requirements_file(self, filename):
         # Process a requirements.txt file
         if len(filename) > 0:
