@@ -11,7 +11,10 @@ import subprocess
 import sys
 import unicodedata
 
-import toml
+if sys.version_info >= (3, 11):
+    import tomllib as toml
+else:
+    import toml
 
 if sys.version_info >= (3, 10):
     from importlib import metadata as importlib_metadata
