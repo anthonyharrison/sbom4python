@@ -570,7 +570,8 @@ class SBOMScanner:
             print(f"Unable to process requirements file {filename}")
 
     def _process_requirement_dependency(self, dependency, filename):
-        if len(dependency.strip()) > 0:
+        dependency = dependency.split("#")[0].strip()
+        if len(dependency) > 0:
             # Ignore anything after ; e.g. python_version<"3.8"
             element = dependency.strip().split(";")[0]
             # Check for pinned dependency
