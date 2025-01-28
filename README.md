@@ -45,7 +45,7 @@ pip install python-magic
 pip install python-magic-bin
 ```
 
-#### Linxu based system
+#### Linux based system
 
 Install `libmagic` using a package manager, for example
 
