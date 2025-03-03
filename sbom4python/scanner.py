@@ -418,6 +418,43 @@ class SBOMScanner:
                 requires = package_data.get_all("Requires-Dist")
             else:
                 requires = None
+            # Use classifier if no license
+            if metadata.get("License") is not None:
+                if metadata["License"] == "UNKNOWN":
+                    metadata["License"] = None
+                elif "see license" in metadata["License"].lower():
+                    # If license has text similar to 'see license file', reset
+                    metadata["License"] = None
+            if metadata.get("License") is None and package_metadata.get("Classifier") is not None:
+                for i in package_data.get_all("Classifier"):
+                    if i.startswith("License"):
+                        # Extract license from classifier
+                        license_name = i.split("::")[-1].strip()
+                        if metadata.get("License") is None:
+                            metadata["License"] = license_name
+                        else:
+                            metadata["License"] = f'{metadata["License"]} AND {license_name}'
+            # Extract dependencies (if any)
+            if package_metadata.get("Requires-Dist"):
+                requires = package_metadata.get("Requires-Dist")
+            else:
+                requires = None
+            # Extract dependencies (if any)
+            if package_metadata.get("Requires-External"):
+                requires = package_metadata.get("Requires-external")
+            else:
+                requires = None
+            # Extract dependencies (if any)
+            if package_metadata.get("Requires"):
+                requires = package_metadata.get("Requires")
+            else:
+                requires = None
+            # Extract dependencies (if any)
+            if package_metadata.get("Requires-python"):
+                requires = package_metadata.get("Requires-python")
+            else:
+                requires = None
+            # Extract dependencies (if any)
 
             if requires is not None:
                 # Find dependent packages
