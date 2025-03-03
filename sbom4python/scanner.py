@@ -425,7 +425,10 @@ class SBOMScanner:
                 elif "see license" in metadata["License"].lower():
                     # If license has text similar to 'see license file', reset
                     metadata["License"] = None
-            if metadata.get("License") is None and package_metadata.get("Classifier") is not None:
+            if (
+                metadata.get("License") is None
+                and package_metadata.get("Classifier") is not None
+            ):
                 for i in package_data.get_all("Classifier"):
                     if i.startswith("License"):
                         # Extract license from classifier
@@ -433,7 +436,9 @@ class SBOMScanner:
                         if metadata.get("License") is None:
                             metadata["License"] = license_name
                         else:
-                            metadata["License"] = f'{metadata["License"]} AND {license_name}'
+                            metadata[
+                                "License"
+                            ] = f'{metadata["License"]} AND {license_name}'
             # Extract dependencies (if any)
             if package_metadata.get("Requires-Dist"):
                 requires = package_metadata.get("Requires-Dist")
