@@ -545,7 +545,9 @@ class SBOMScanner:
         return len(self.metadata) > 0
 
     def get(self, attribute):
-        return self.metadata.get(attribute, "").lstrip()
+        if self.metadata.get(attribute) is not None:
+            return self.metadata.get(attribute, "").lstrip()
+        return ""
 
     def get_files(self):
         return self.sbom_files
