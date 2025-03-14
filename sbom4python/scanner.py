@@ -440,27 +440,6 @@ class SBOMScanner:
                                 "License"
                             ] = f'{metadata["License"]} AND {license_name}'
             # Extract dependencies (if any)
-            if package_metadata.get("Requires-Dist"):
-                requires = package_metadata.get("Requires-Dist")
-            else:
-                requires = None
-            # Extract dependencies (if any)
-            if package_metadata.get("Requires-External"):
-                requires = package_metadata.get("Requires-external")
-            else:
-                requires = None
-            # Extract dependencies (if any)
-            if package_metadata.get("Requires"):
-                requires = package_metadata.get("Requires")
-            else:
-                requires = None
-            # Extract dependencies (if any)
-            if package_metadata.get("Requires-python"):
-                requires = package_metadata.get("Requires-python")
-            else:
-                requires = None
-            # Extract dependencies (if any)
-
             if requires is not None:
                 # Find dependent packages
                 if self.debug:
