@@ -137,7 +137,7 @@ class SBOMScanner:
         self.sbom_package.set_filesanalysis(self.include_file)
         # Get package metadata
         if len(self.metadata) > 0:
-            license_information = self.get("License")
+            license_information = self.get("License", "")
             supplier = self.get("Author") + " " + self.get("Author-email")
             home_page = self.get("Home-page")
             summary = self.get("Summary")
@@ -597,6 +597,8 @@ class SBOMScanner:
             self.process_setup_py(filename)
         elif filename.endswith(".txt"):
             self.process_requirements_file(filename)
+        elif filename.endswith(".lock"):
+            self.process_uvlock_file(filename)
         elif self.debug:
             print(f"Unable to process requirements file {filename}")
 
@@ -725,3 +727,26 @@ class SBOMScanner:
                                     if "dependencies" in package:
                                         for dependency in package['dependencies']:
                                             self._create_relationship(dependency['name'], package['name'])
+
+    def process_uvlock_file(self, filename):
+        # Process uv.lock file
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                with open(filename) as file:
+                    uvlock_data = toml.load(file)
+                    if self.debug:
+                        print (uvlock_data)
+                    if "package" in uvlock_data:
+                        self.set_lifecycle("build")
+                        self.set_parent(filename)
+                        for package in uvlock_data["package"]:
+                            if "version" in package:
+                                self._process_requirement_dependency(
+                                    f"{package['name']}=={package['version']}", filename
+                                )
+                                if "dependencies" in package:
+                                    for dependency in package['dependencies']:
+                                        self._create_relationship(dependency['name'], package['name'])
