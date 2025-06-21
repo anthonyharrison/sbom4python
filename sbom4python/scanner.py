@@ -588,7 +588,9 @@ class SBOMScanner:
 
     def process_requirements(self, filename):
         if filename.endswith(".toml"):
+            # Could be a pyproject or pylock file
             self.process_pyproject(filename)
+            self.process_pylock(filename)
         elif filename.endswith(".cfg"):
             self.process_setup_cfg(filename)
         elif filename.endswith(".py"):
@@ -699,3 +701,27 @@ class SBOMScanner:
                 self.set_parent(filename)
                 for dependency in dependencies:
                     self._process_requirement_dependency(dependency, filename)
+
+    def process_pylock(self, filename):
+        # Process pylock.toml file
+        if len(filename) > 0:
+            # Check file exists
+            filePath = pathlib.Path(filename)
+            # Check path exists and is a valid file
+            if filePath.exists() and filePath.is_file():
+                with open(filename) as file:
+                    pylock_data = toml.load(file)
+                    if "lock-version" in pylock_data:
+                        if self.debug:
+                            print (pylock_data)
+                        if "packages" in pylock_data:
+                            self.set_lifecycle("pre-build")
+                            self.set_parent(filename)
+                            for package in pylock_data["packages"]:
+                                if "version" in package:
+                                    self._process_requirement_dependency(
+                                        f"{package['name']}=={package['version']}", filename
+                                    )
+                                    if "dependencies" in package:
+                                        for dependency in package['dependencies']:
+                                            self._create_relationship(dependency['name'], package['name'])

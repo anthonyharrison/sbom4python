@@ -78,7 +78,7 @@ Input:
   -m MODULE, --module MODULE
                         identity of python module
   -r REQUIREMENT, --requirement REQUIREMENT
-                        name of requirements.txt file
+                        name of requirements file
   --system              include all installed python modules within system
   --exclude-license     suppress detecting the license of components
   --include-file        include reporting files associated with module
@@ -104,8 +104,9 @@ Output:
 The `--module` option is used to identify the Python module. The `--system` option is used to indicate that the SBOM is to include all installed
 Python modules.
 
-The `--requirement` option is used to create an SBOM from a requirements.txt, pyproject.toml, setup.cfg or setup.py file. Whilst the filenames may be different e.g. requirements_test.txt can be specified, it is the file extension which determines the identification of the dependencies. Using this option will result in no transitive dependencies being
-identified.
+The `--requirement` option is used to create an SBOM from a pylock.toml, requirements.txt, pyproject.toml, setup.cfg or setup.py file.
+Whilst the filenames may be different e.g. requirements_test.txt can be specified, it is the file extension which determines the identification of
+the dependencies. Using this option will normally result in no transitive dependencies being identified.
 
 One of `--module`,  `--requirement` or `--system` must be specified. If multiple options are specified, the order of priority is `--module`, `--system` and `--requirement`.
 
