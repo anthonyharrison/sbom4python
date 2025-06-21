@@ -137,7 +137,7 @@ class SBOMScanner:
         self.sbom_package.set_filesanalysis(self.include_file)
         # Get package metadata
         if len(self.metadata) > 0:
-            license_information = self.get("License", "")
+            license_information = self.get("License")
             supplier = self.get("Author") + " " + self.get("Author-email")
             home_page = self.get("Home-page")
             summary = self.get("Summary")
