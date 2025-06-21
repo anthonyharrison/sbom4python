@@ -75,6 +75,11 @@ def main(argv=None):
         default=False,
         help="use pip for package management",
     )
+    input_group.add_argument(
+        "--python",
+        action="store",
+        help="use specified Python interpreter for pip",
+    )
 
     output_group = parser.add_argument_group("Output")
     output_group.add_argument(
@@ -130,6 +135,7 @@ def main(argv=None):
         "debug": False,
         "format": "tag",
         "graph": "",
+        "python": "",
     }
 
     raw_args = parser.parse_args(argv[1:])
@@ -167,6 +173,7 @@ def main(argv=None):
         args["exclude_license"],
         include_service=args["include_service"],
         use_pip=args["use_pip"],
+        python_path=args["python"],
     )
 
     if len(module_name) > 0:
