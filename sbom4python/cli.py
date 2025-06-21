@@ -45,7 +45,7 @@ def main(argv=None):
         "--requirement",
         action="store",
         default="",
-        help="name of requirements.txt file",
+        help="name of requirements file",
     )
     input_group.add_argument(
         "--system",
