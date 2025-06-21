@@ -64,10 +64,11 @@ brew install libmagic
 ## Usage
 
 ```bash
-usage: sbom4python [-h] [-m MODULE] [--system] [--exclude-license] [--include-file] [-d] [--sbom {spdx,cyclonedx}] [--format {tag,json,yaml}] [-o OUTPUT_FILE] [-g GRAPH] [-V]
+usage: sbom4python [-h] [-m MODULE] [-r REQUIREMENT] [--system] [--exclude-license] [--include-file] [--include-service] [--use-pip] [--python PYTHON] [-d] [--sbom {spdx,cyclonedx}] [--format {tag,json,yaml}] [-o OUTPUT_FILE]
+                   [-g GRAPH] [-V]
 
-SBOM4Python generates a Software Bill of Materials for the specified installed Python module identifying all of the dependent components which are explicity defined (typically via requirements.txt file)
-or implicitly as a hidden dependency.
+SBOM4Python generates a Software Bill of Materials for the specified installed Python module identifying all of the dependent components which are explicity defined (typically via requirements.txt file) or implicitly as a hidden
+dependency.
 
 options:
   -h, --help            show this help message and exit
@@ -81,6 +82,9 @@ Input:
   --system              include all installed python modules within system
   --exclude-license     suppress detecting the license of components
   --include-file        include reporting files associated with module
+  --include-service     include reporting of endpoints
+  --use-pip             use pip for package management
+  --python PYTHON       use specified Python interpreter for pip
 
 Output:
   -d, --debug           add debug information
@@ -92,6 +96,7 @@ Output:
                         output filename (default: output to stdout)
   -g GRAPH, --graph GRAPH
                         filename for dependency graph
+
 ```
 						
 ## Operation
@@ -103,6 +108,8 @@ The `--requirement` option is used to create an SBOM from a requirements.txt, py
 identified.
 
 One of `--module`,  `--requirement` or `--system` must be specified. If multiple options are specified, the order of priority is `--module`, `--system` and `--requirement`.
+
+The `--python` option is to speficy the path to a different python installation e.g. when using venv. This option should also be used with the `--use-pip` option.
 
 The `--sbom` option is used to specify the format of the generated SBOM (the default is SPDX). The `--format` option
 can be used to specify the formatting of the SBOM (the default is Tag Value format for a SPDX SBOM). JSON format is supported for both
