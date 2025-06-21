@@ -10,6 +10,7 @@ import string
 import subprocess
 import sys
 import unicodedata
+from typing import Iterable
 
 if sys.version_info >= (3, 11):
     import tomllib as toml
@@ -42,6 +43,7 @@ class SBOMScanner:
         lifecycle="build",
         include_service=False,
         use_pip=False,
+        python_path:str=None
     ):
         self.record = []
         self.debug = debug
@@ -62,16 +64,21 @@ class SBOMScanner:
         self.set_lifecycle(lifecycle)
         self.metadata = {}
         self.use_pip = use_pip
+        self.python_path = pathlib.Path(python_path)
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
 
-    def run_program(self, command_line):
-        # Remove any null bytes
-        command_line = command_line.replace("\x00", "")
-        # Split command line into individual elements
-        params = command_line.split()
-        res = subprocess.run(params, capture_output=True, text=True)
+    def run_pip_cmd(self, params:Iterable[str]):
+        cmd = ["pip"]
+        if self.python_path.exists():
+            cmd.extend(("--python", str(self.python_path)))
+
+        cmd.extend(params)
+        return self.run_program(cmd)
+
+    def run_program(self, params:Iterable[str]):
+        res = subprocess.run(list(params), capture_output=True, text=True)
         return res.stdout.splitlines()
 
     def set_lifecycle(self, lifecycle):
@@ -369,7 +376,7 @@ class SBOMScanner:
     def _getpackage_metadata(self, module):
         metadata = {}
         if self.use_pip:
-            out = self.run_program(f"pip show {module}")
+            out = self.run_pip_cmd(("show", module))
             for line in out:
                 entry = line.split(":")
                 # If: this line contain an non-empty entry delimited by ':'
@@ -560,7 +567,7 @@ class SBOMScanner:
     def _get_installed_modules(self):
         modules = []
         if self.use_pip:
-            out = self.run_program("pip list")
+            out = self.run_pip_cmd(("list", ))
             if len(out) > 0:
                 # Ignore headers in output stream
                 for m in out[2:]:
