@@ -21,7 +21,6 @@ if sys.version_info >= (3, 10):
 else:
     import importlib_metadata
 
-import pkg_resources
 from lib4package.metadata import Metadata
 from lib4sbom.data.document import SBOMDocument
 from lib4sbom.data.package import SBOMPackage
@@ -567,8 +566,8 @@ class SBOMScanner:
                 for m in out[2:]:
                     modules.append(m.split(" ")[0])
         else:
-            installed_packages = pkg_resources.working_set
-            modules = sorted(["%s" % (i.key) for i in installed_packages])
+            installed_packages_info = importlib_metadata.distributions()
+            modules = sorted([p.metadata["Name"].lower() for p in installed_packages_info])
         if self.debug:
             print(modules)
         return modules
