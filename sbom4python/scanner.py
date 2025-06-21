@@ -43,7 +43,7 @@ class SBOMScanner:
         lifecycle="build",
         include_service=False,
         use_pip=False,
-        python_path:str=None
+        python_path: str = None,
     ):
         self.record = []
         self.debug = debug
@@ -69,7 +69,7 @@ class SBOMScanner:
     def set_parent(self, module):
         self.parent = f"Python-{module}"
 
-    def run_pip_cmd(self, params:Iterable[str]):
+    def run_pip_cmd(self, params: Iterable[str]):
         cmd = ["pip"]
         if self.python_path.exists():
             cmd.extend(("--python", str(self.python_path)))
@@ -77,7 +77,7 @@ class SBOMScanner:
         cmd.extend(params)
         return self.run_program(cmd)
 
-    def run_program(self, params:Iterable[str]):
+    def run_program(self, params: Iterable[str]):
         res = subprocess.run(list(params), capture_output=True, text=True)
         return res.stdout.splitlines()
 
@@ -567,14 +567,16 @@ class SBOMScanner:
     def _get_installed_modules(self):
         modules = []
         if self.use_pip:
-            out = self.run_pip_cmd(("list", ))
+            out = self.run_pip_cmd(("list",))
             if len(out) > 0:
                 # Ignore headers in output stream
                 for m in out[2:]:
                     modules.append(m.split(" ")[0])
         else:
             installed_packages_info = importlib_metadata.distributions()
-            modules = sorted([p.metadata["Name"].lower() for p in installed_packages_info])
+            modules = sorted(
+                [p.metadata["Name"].lower() for p in installed_packages_info]
+            )
         if self.debug:
             print(modules)
         return modules
@@ -715,18 +717,21 @@ class SBOMScanner:
                     pylock_data = toml.load(file)
                     if "lock-version" in pylock_data:
                         if self.debug:
-                            print (pylock_data)
+                            print(pylock_data)
                         if "packages" in pylock_data:
                             self.set_lifecycle("pre-build")
                             self.set_parent(filename)
                             for package in pylock_data["packages"]:
                                 if "version" in package:
                                     self._process_requirement_dependency(
-                                        f"{package['name']}=={package['version']}", filename
+                                        f"{package['name']}=={package['version']}",
+                                        filename,
                                     )
                                     if "dependencies" in package:
-                                        for dependency in package['dependencies']:
-                                            self._create_relationship(dependency['name'], package['name'])
+                                        for dependency in package["dependencies"]:
+                                            self._create_relationship(
+                                                dependency["name"], package["name"]
+                                            )
 
     def process_uvlock_file(self, filename):
         # Process uv.lock file
@@ -738,7 +743,7 @@ class SBOMScanner:
                 with open(filename) as file:
                     uvlock_data = toml.load(file)
                     if self.debug:
-                        print (uvlock_data)
+                        print(uvlock_data)
                     if "package" in uvlock_data:
                         self.set_lifecycle("build")
                         self.set_parent(filename)
@@ -748,5 +753,7 @@ class SBOMScanner:
                                     f"{package['name']}=={package['version']}", filename
                                 )
                                 if "dependencies" in package:
-                                    for dependency in package['dependencies']:
-                                        self._create_relationship(dependency['name'], package['name'])
+                                    for dependency in package["dependencies"]:
+                                        self._create_relationship(
+                                            dependency["name"], package["name"]
+                                        )
