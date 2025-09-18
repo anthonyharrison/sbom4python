@@ -647,7 +647,7 @@ class SBOMScanner:
             filePath = pathlib.Path(filename)
             # Check path exists and is a valid file
             if filePath.exists() and filePath.is_file():
-                with open(filename) as file:
+                with open(filename, "rb") as file:
                     pyproject_data = toml.load(file)
                     if "project" in pyproject_data:
                         if "dependencies" in pyproject_data["project"]:
@@ -713,7 +713,7 @@ class SBOMScanner:
             filePath = pathlib.Path(filename)
             # Check path exists and is a valid file
             if filePath.exists() and filePath.is_file():
-                with open(filename) as file:
+                with open(filename, "rb") as file:
                     pylock_data = toml.load(file)
                     if "lock-version" in pylock_data:
                         if self.debug:
