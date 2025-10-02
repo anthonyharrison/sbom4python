@@ -740,7 +740,7 @@ class SBOMScanner:
             filePath = pathlib.Path(filename)
             # Check path exists and is a valid file
             if filePath.exists() and filePath.is_file():
-                with open(filename) as file:
+                with open(filename, "rb") as file:
                     uvlock_data = toml.load(file)
                     if self.debug:
                         print(uvlock_data)
