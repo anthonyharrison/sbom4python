@@ -689,8 +689,9 @@ class SBOMScanner:
             if filePath.exists() and filePath.is_file():
                 dependencies = []
                 with open(filename, "r") as setup_file:
+                    content = setup_file.read() 
                     # Read the file into a stream and search for list if dependencies specified by install_requires
-                    stream = setup_file.read().replace("\n", "")
+                    stream = content.replace("\n", "")
                     match = re.search(r"install_requires\s*=\s*\[([^\]]+)\]", stream)
                     if match:
                         dependency_list = match.group(1).strip()
@@ -699,6 +700,23 @@ class SBOMScanner:
                             for dep in dependency_list.split(",")
                             if len(dep) > 0
                         ]
+                    # Method 2: Handle multiline string with .split()
+                    # Handles: install_requires = """package==1.0\npackage2>=2.0""".split()
+                    # Also handles single quotes: install_requires = '''...'''.split()
+                    if not dependencies:
+                       split_match = re.search(r'install_requires\s*=\s*["\'"]{3}([^"\']+)["\'"]{3}\.split\(\)', content, re.DOTALL)
+                       if split_match:
+                        # Extract dependencies from the multiline string
+                        deps_block = split_match.group(1).strip()
+                        # Split by newlines and filter out empty lines
+                        dependencies = [
+                            line.strip()
+                            for line in deps_block.split('\n')
+                            if line.strip() and not line.strip().startswith('#')
+                        ]
+                
+                
+                
                 if self.debug:
                     print(dependencies)
                 self.set_lifecycle("pre-build")
