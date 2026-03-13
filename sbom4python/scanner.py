@@ -408,7 +408,7 @@ class SBOMScanner:
             if self.debug:
                 print(f"Package metadata for {module}")
                 for key, value in package_metadata.items():
-                    print (key, value)
+                    print(key, value)
             # Store subset of metadata (same as pip show <module>)
             for attribute in [
                 "Name",
@@ -586,9 +586,7 @@ class SBOMScanner:
             # modules = sorted(
             #     [p.metadata["Name"].lower() for p in installed_packages_info]
             # )
-            modules = sorted(
-                [p.metadata["Name"] for p in installed_packages_info]
-            )
+            modules = sorted([p.metadata["Name"] for p in installed_packages_info])
         if self.debug:
             print(modules)
         return modules
@@ -716,15 +714,19 @@ class SBOMScanner:
                     # Handles: install_requires = """package==1.0\npackage2>=2.0""".split()
                     # Also handles single quotes: install_requires = '''...'''.split()
                     if not dependencies:
-                        split_match = re.search(r'install_requires\s*=\s*["\'"]{3}([^"\']+)["\'"]{3}\.split\(\)', content, re.DOTALL)
+                        split_match = re.search(
+                            r'install_requires\s*=\s*["\'"]{3}([^"\']+)["\'"]{3}\.split\(\)',
+                            content,
+                            re.DOTALL,
+                        )
                         if split_match:
                             # Extract dependencies from the multiline string
                             deps_block = split_match.group(1).strip()
                             # Split by newlines and filter out empty lines
                             dependencies = [
                                 line.strip()
-                                for line in deps_block.split('\n')
-                                if line.strip() and not line.strip().startswith('#')
+                                for line in deps_block.split("\n")
+                                if line.strip() and not line.strip().startswith("#")
                             ]
                 if self.debug:
                     print(dependencies)
