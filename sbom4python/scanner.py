@@ -230,12 +230,13 @@ class SBOMScanner:
                 "cigithubactions": "build-system",
                 "buildsystem": "build-systen",
                 "releasenotes": "release-notes",
-                "releasen": "release-notes",
+                "release": "release-notes",
+                "releases": "release-notes",
                 "twitter": "social",
                 "discord": "social",
                 "home": "home-page",
                 "homepage": "home-page",
-                "home page": "home-page",
+                "githubhomepage": "home-page",
             }
             for ref in self.metadata.get("Project-URL"):
                 category = ref.split(", ")[0].translate(removal_map).lower()
@@ -392,14 +393,22 @@ class SBOMScanner:
                     )
         else:
             try:
+                if self.debug:
+                    print(f"Retrieve metadata for {module}")
                 package_data = importlib_metadata.metadata(module)
             except importlib_metadata.PackageNotFoundError:
-                package_data = None
-            if package_data is None:
+                if self.debug:
+                    print(f"Package Not Found : {module}")
+                package_data = []
+            if len(package_data) == 0:
                 if self.debug:
                     print(f"Unable to retrieve metadata for {module}")
                 return metadata
             package_metadata = dict(package_data)
+            if self.debug:
+                print(f"Package metadata for {module}")
+                for key, value in package_metadata.items():
+                    print (key, value)
             # Store subset of metadata (same as pip show <module>)
             for attribute in [
                 "Name",
@@ -414,8 +423,8 @@ class SBOMScanner:
                 if package_metadata.get(attribute) is not None:
                     metadata[attribute] = package_metadata[attribute]
             # License-Expresssion is preferred to License
-            if package_metadata.get("License_Expression"):
-                metadata["License"] = package_metadata["License_Expression"]
+            if package_metadata.get("License-Expression") is not None:
+                metadata["License"] = package_metadata["License-Expression"]
             # Project-URL (multiple)
             if package_metadata.get("Project-URL"):
                 metadata["Project-URL"] = package_data.get_all("Project-URL")
@@ -465,7 +474,7 @@ class SBOMScanner:
             else:
                 metadata["Requires"] = ""
         if self.debug:
-            print(metadata)
+            print(f"Metadata for {module} - {metadata}")
         return metadata
 
     def process_module(self, module, parent="-"):
@@ -574,8 +583,11 @@ class SBOMScanner:
                     modules.append(m.split(" ")[0])
         else:
             installed_packages_info = importlib_metadata.distributions()
+            # modules = sorted(
+            #     [p.metadata["Name"].lower() for p in installed_packages_info]
+            # )
             modules = sorted(
-                [p.metadata["Name"].lower() for p in installed_packages_info]
+                [p.metadata["Name"] for p in installed_packages_info]
             )
         if self.debug:
             print(modules)
@@ -689,7 +701,7 @@ class SBOMScanner:
             if filePath.exists() and filePath.is_file():
                 dependencies = []
                 with open(filename, "r") as setup_file:
-                    content = setup_file.read() 
+                    content = setup_file.read()
                     # Read the file into a stream and search for list if dependencies specified by install_requires
                     stream = content.replace("\n", "")
                     match = re.search(r"install_requires\s*=\s*\[([^\]]+)\]", stream)
@@ -704,19 +716,16 @@ class SBOMScanner:
                     # Handles: install_requires = """package==1.0\npackage2>=2.0""".split()
                     # Also handles single quotes: install_requires = '''...'''.split()
                     if not dependencies:
-                       split_match = re.search(r'install_requires\s*=\s*["\'"]{3}([^"\']+)["\'"]{3}\.split\(\)', content, re.DOTALL)
-                       if split_match:
-                        # Extract dependencies from the multiline string
-                        deps_block = split_match.group(1).strip()
-                        # Split by newlines and filter out empty lines
-                        dependencies = [
-                            line.strip()
-                            for line in deps_block.split('\n')
-                            if line.strip() and not line.strip().startswith('#')
-                        ]
-                
-                
-                
+                        split_match = re.search(r'install_requires\s*=\s*["\'"]{3}([^"\']+)["\'"]{3}\.split\(\)', content, re.DOTALL)
+                        if split_match:
+                            # Extract dependencies from the multiline string
+                            deps_block = split_match.group(1).strip()
+                            # Split by newlines and filter out empty lines
+                            dependencies = [
+                                line.strip()
+                                for line in deps_block.split('\n')
+                                if line.strip() and not line.strip().startswith('#')
+                            ]
                 if self.debug:
                     print(dependencies)
                 self.set_lifecycle("pre-build")
