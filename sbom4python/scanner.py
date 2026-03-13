@@ -64,7 +64,7 @@ class SBOMScanner:
         self.set_lifecycle(lifecycle)
         self.metadata = {}
         self.use_pip = use_pip
-        self.python_path = pathlib.Path(python_path)
+        self.python_path = pathlib.Path(python_path).expanduser()
 
     def set_parent(self, module):
         self.parent = f"Python-{module}"
