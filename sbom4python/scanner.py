@@ -10,6 +10,7 @@ import string
 import subprocess
 import sys
 import unicodedata
+from pathlib import Path
 from typing import Iterable
 
 if sys.version_info >= (3, 11):
@@ -24,6 +25,7 @@ else:
 
 from lib4package.metadata import Metadata
 from lib4sbom.data.document import SBOMDocument
+from lib4sbom.data.file import SBOMFile
 from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
@@ -50,6 +52,7 @@ class SBOMScanner:
         self.include_file = include_file
         self.include_license = exclude_license
         self.include_service = include_service
+        self.sbom_file = SBOMFile()
         self.sbom_package = SBOMPackage()
         self.sbom_relationship = SBOMRelationship()
         self.sbom_document = SBOMDocument()
@@ -110,6 +113,24 @@ class SBOMScanner:
             # Only one email can be specified, so choose last one
             supplier = supplier + "(" + emails[-1] + ")"
         return re.sub(" +", " ", supplier.strip())
+
+    def _create_file(self, filename):
+        self.sbom_file.initialise()
+        self.sbom_file.set_name(filename.name)
+        self.sbom_file.set_filetype("BINARY")
+        self.sbom_file.set_comment(f"File location: {str(filename)}")
+        # Checksum file
+        (
+            file_hash_1,
+            file_hash_256,
+            file_hash_512,
+        ) = self.file_scanner._generate_checksum(str(filename))
+        self.sbom_file.set_checksum("SHA1", file_hash_1)
+        self.sbom_file.set_checksum("SHA256", file_hash_256)
+        self.sbom_file.set_checksum("SHA512", file_hash_512)
+        # Store package data
+        self.sbom_files[(self.sbom_file.get_name(),)] = self.sbom_file.get_file()
+        return self.sbom_file.get_name(), self.sbom_file.get_value("id")
 
     def _create_package(self, package, version, parent="-", requirements=None):
         self.sbom_package.initialise()
@@ -493,6 +514,31 @@ class SBOMScanner:
             else:
                 self._create_package(package, version, parent)
             self._create_relationship(package, parent)
+            try:
+                files = importlib_metadata.files(module.strip())
+            except importlib_metadata.PackageNotFoundError:
+                # Shouldn't happen
+                return len(self.metadata) > 0
+            for file_obj in files:
+                full_path = Path(file_obj.locate())
+                if not full_path.is_file():
+                    continue
+                if full_path.suffix in [".so", ".dll", ".dylib"]:
+                    # Create element
+                    binary_name, binary_id = self._create_file(full_path)
+                    # Add relationship
+                    self.sbom_relationship.initialise()
+                    self.sbom_relationship.set_relationship(
+                        package, "CONTAINS", binary_name
+                    )
+                    self.sbom_relationship.set_relationship_id(
+                        self.sbom_package.get_value("id"),
+                        binary_id,
+                    )
+                    self.sbom_relationship.set_target_type("file")
+                    self.sbom_relationships.append(
+                        self.sbom_relationship.get_relationship()
+                    )
             if self.include_file:
                 package = self.get("Name").lower().replace("-", "_")
                 directory_location = f'{self.get("Location")}/{package}'
