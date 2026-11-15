@@ -29,6 +29,7 @@ from lib4sbom.data.file import SBOMFile
 from lib4sbom.data.package import SBOMPackage
 from lib4sbom.data.relationship import SBOMRelationship
 from lib4sbom.license import LicenseScanner
+from lib4sbom.utils import format_supplier
 from sbom4files.filescanner import FileScanner
 
 
@@ -86,33 +87,6 @@ class SBOMScanner:
 
     def set_lifecycle(self, lifecycle):
         self.sbom_document.set_value("lifecycle", lifecycle)
-
-    def _format_supplier(self, supplier_info, include_email=True):
-        # See https://stackoverflow.com/questions/1207457/convert-a-unicode-string-to-a-string-in-python-containing-extra-symbols
-        # And convert byte object to a string
-        name_str = (
-            unicodedata.normalize("NFKD", supplier_info)
-            .encode("ascii", "ignore")
-            .decode("utf-8")
-        )
-        if " " in name_str:
-            # Get names assumed to be at least two names <first> <surname>
-            names = re.findall(r"[a-zA-Z\.\]+ [A-Za-z]+ ", name_str)
-        else:
-            # Handle case where only single name provided
-            names = [name_str]
-        # Get email addresses
-        # Use RFC-5322 compliant regex (https://regex101.com/library/6EL6YF)
-        emails = re.findall(
-            r"((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))",
-            supplier_info,
-            re.IGNORECASE,
-        )
-        supplier = " ".join(n for n in names)
-        if include_email and len(emails) > 0:
-            # Only one email can be specified, so choose last one
-            supplier = supplier + "(" + emails[-1] + ")"
-        return re.sub(" +", " ", supplier.strip())
 
     def _create_file(self, filename):
         self.sbom_file.initialise()
@@ -202,10 +176,10 @@ class SBOMScanner:
             self.sbom_package.set_licensecomments(license_comment)
         if len(supplier.split()) > 3:
             self.sbom_package.set_supplier(
-                "Organization", self._format_supplier(supplier)
+                "Organization", format_supplier(supplier)
             )
         elif len(supplier) > 1:
-            self.sbom_package.set_supplier("Person", self._format_supplier(supplier))
+            self.sbom_package.set_supplier("Person", format_supplier(supplier))
         else:
             self.sbom_package.set_supplier("UNKNOWN", "NOASSERTION")
         if home_page != "":
@@ -290,7 +264,7 @@ class SBOMScanner:
         else:
             self.sbom_package.set_purl(f"pkg:pypi/{package}")
         if len(supplier) > 1:
-            component_supplier = self._format_supplier(supplier, include_email=False)
+            component_supplier = format_supplier(supplier, include_email=False)
             if version is not None:
                 cpe_version = version.replace(":", "\\:")
             else:
