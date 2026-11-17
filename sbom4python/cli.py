@@ -186,29 +186,33 @@ def main(argv=None):
         print("[ERROR] Nothing to process")
         return -1
 
-    # Generate SBOM file
-    python_sbom = SBOM()
-    python_sbom.add_document(sbom_scan.get_document())
-    python_sbom.add_files(sbom_scan.get_files())
-    python_sbom.add_packages(sbom_scan.get_packages())
-    python_sbom.add_relationships(sbom_scan.get_relationships())
+    if len(sbom_scan.get_packages()) > 0:
 
-    sbom_gen = SBOMGenerator(
-        sbom_type=args["sbom"], format=bom_format, application=app_name, version=VERSION
-    )
-    sbom_gen.generate(
-        project_name=sbom_scan.get_parent(),
-        sbom_data=python_sbom.get_sbom(),
-        filename=args["output_file"],
-    )
+        # Generate SBOM file
+        python_sbom = SBOM()
+        python_sbom.add_document(sbom_scan.get_document())
+        python_sbom.add_files(sbom_scan.get_files())
+        python_sbom.add_packages(sbom_scan.get_packages())
+        python_sbom.add_relationships(sbom_scan.get_relationships())
 
-    if len(args["graph"]) > 0:
-        sbom_dot = DOTGenerator(python_sbom.get_sbom()["packages"])
-        sbom_dot.generatedot(python_sbom.get_sbom()["relationships"])
-        dot_out = SBOMOutput(args["graph"], "dot")
-        dot_out.generate_output(sbom_dot.getDOT())
+        sbom_gen = SBOMGenerator(
+            sbom_type=args["sbom"], format=bom_format, application=app_name, version=VERSION
+        )
+        sbom_gen.generate(
+            project_name=sbom_scan.get_parent(),
+            sbom_data=python_sbom.get_sbom(),
+            filename=args["output_file"],
+        )
 
-    return 0
+        if len(args["graph"]) > 0:
+            sbom_dot = DOTGenerator(python_sbom.get_sbom()["packages"])
+            sbom_dot.generatedot(python_sbom.get_sbom()["relationships"])
+            dot_out = SBOMOutput(args["graph"], "dot")
+            dot_out.generate_output(sbom_dot.getDOT())
+
+        return 0
+    print("[ERROR] Module not found")
+    return -1
 
 
 if __name__ == "__main__":
