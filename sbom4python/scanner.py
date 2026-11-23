@@ -3,6 +3,7 @@
 
 import ast
 import configparser
+import os
 import pathlib
 import platform
 import re
@@ -126,7 +127,7 @@ class SBOMScanner:
                     "release_date", self.package_metadata.get_latest_release_time()
                 )
         if requirements is not None:
-            self.sbom_package.set_evidence(requirements)
+            self.sbom_package.set_evidence(os.path.abspath(requirements))
         if parent == "-":
             self.sbom_package.set_type("application")
         self.sbom_package.set_filesanalysis(self.include_file)
